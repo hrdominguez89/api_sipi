@@ -20,12 +20,6 @@ class Requests
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="requests")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $professor;
-
-    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $requestedPrograms;
@@ -61,6 +55,11 @@ class Requests
      */
     private $requestsComputers;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="requests")
+     */
+    private $professor;
+
     public function __construct()
     {
         $this->requestsComputers = new ArrayCollection();
@@ -69,18 +68,6 @@ class Requests
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getProfessor(): ?Users
-    {
-        return $this->professor;
-    }
-
-    public function setProfessor(?Users $professor): self
-    {
-        $this->professor = $professor;
-
-        return $this;
     }
 
     public function getRequestedPrograms(): ?string
@@ -181,6 +168,18 @@ class Requests
                 $requestsComputer->setRequest(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProfessor(): ?User
+    {
+        return $this->professor;
+    }
+
+    public function setProfessor(?User $professor): self
+    {
+        $this->professor = $professor;
 
         return $this;
     }

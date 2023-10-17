@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Controller\Secure;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/students")
+ * @Route("/api")
  */
-class StudentsController extends AbstractController
+class ApiLoginController extends AbstractController
 {
     /**
-     * @Route("/", name="app_students")
+     * @Route("/login", name="login_check")
      */
     public function index(): JsonResponse
     {
         return $this->json([
             'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/StudentsController.php',
+            'path' => 'src/Controller/ApiLoginController.php',
         ]);
     }
 }
