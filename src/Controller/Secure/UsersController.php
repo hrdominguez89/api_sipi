@@ -2,9 +2,10 @@
 
 namespace App\Controller\Secure;
 
-use App\Entity\Students;
-use App\Form\StudentType;
-use App\Repository\StudentsRepository;
+use App\Entity\User;
+use App\Form\UserType;
+use App\Repository\RolesRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,9 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Utils\FormErrorsUtil;
 
 /**
- * @Route("/api/students")
+ * @Route("/api/users")
  */
-class StudentsController extends AbstractController
+class UsersController extends AbstractController
 {
 
     private $formErrorsUtil;
@@ -28,15 +29,15 @@ class StudentsController extends AbstractController
 
 
     /**
-     * @Route("", name="students", methods={"GET","POST"})
+     * @Route("", name="users", methods={"GET","POST"})
      */
-    public function index(StudentsRepository $studentsRepository, Request $request, EntityManagerInterface $em): JsonResponse
+    public function index(UserRepository $userRepository, RolesRepository $rolesRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if ($request->getMethod() == 'GET') {
-            $students = $studentsRepository->findAll();
+            $users = $userRepository->findAll();
             $data = [];
-            foreach ($students as $student) {
-                $data[] = $student->getDataStudent();
+            foreach ($users as $user) {
+                $data[] = $user->getDataUser();
             }
             return $this->json(
                 $data,
@@ -48,12 +49,18 @@ class StudentsController extends AbstractController
         $body = $request->getContent();
         $data = json_decode($body, true);
 
-        //creo el formulario para hacer las validaciones    
-        $student = new Students();
-        $student->setDni(@$data['dni']);
-        $student->setFullname(@$data['fullname']);
+        //creo el formulario para hacer las validaciones
 
-        $form = $this->createForm(StudentType::class, $student);
+        $rol = null;
+        if (@$data['rol']) {
+            $rol = $rolesRepository->find(@$data['rol']);
+        }
+        $user = new User();
+        $user->setEmail(@$data['email']);
+        $user->setFullname(@$data['fullname']);
+        $user->setRol(@$rol);
+
+        $form = $this->createForm(UserType::class, $user);
         $form->submit($data, false);
 
         if (!$form->isValid()) {
@@ -67,21 +74,21 @@ class StudentsController extends AbstractController
                 ['Content-Type' => 'application/json']
             );
         }
-        $em->persist($student);
+        $em->persist($user);
         $em->flush();
         return $this->json(
-            $student->getDataStudent(),
+            $user->getDataUser(),
             Response::HTTP_CREATED,
             ['Content-Type' => 'application/json']
         );
     }
 
     /**
-     * @Route("/{student_id}", name="student_by_id", methods={"GET","PATCH"})
+     * @Route("/{user_id}", name="user_by_id", methods={"GET","PATCH"})
      */
-    public function studentById($student_id, StudentsRepository $studentsRepository, Request $request, EntityManagerInterface $em): JsonResponse
+    public function userById($user_id, userRepository $userRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
-        if (!(int)$student_id) {
+        if (!(int)$user_id) {
             return $this->json(
                 [
                     "status" => false,
@@ -92,8 +99,8 @@ class StudentsController extends AbstractController
             );
         }
 
-        $student = $studentsRepository->find($student_id);
-        if (!$student) {
+        $user = $userRepository->find($user_id);
+        if (!$user) {
             return $this->json(
                 [
                     "status" => false,
@@ -105,7 +112,7 @@ class StudentsController extends AbstractController
         }
         if ($request->getMethod() == 'GET') {
             return $this->json(
-                $student->getDataStudent(),
+                $user->getDataUser(),
                 Response::HTTP_ACCEPTED,
                 ['Content-Type' => 'application/json']
             );
@@ -114,10 +121,10 @@ class StudentsController extends AbstractController
         $body = $request->getContent();
         $data = json_decode($body, true);
 
-        $student->setDni(@$data['dni'] ?: $student->getDni());
-        $student->setFullname(@$data['fullname'] ?: $student->getFullname());
+        // $user->setDni(@$data['dni'] ?: $user->getDni());
+        $user->setFullname(@$data['fullname'] ?: $user->getFullname());
 
-        $form = $this->createForm(StudentType::class, $student);
+        $form = $this->createForm(userType::class, $user);
         $form->submit($data, false);
 
         if (!$form->isValid()) {
@@ -131,45 +138,11 @@ class StudentsController extends AbstractController
                 ['Content-Type' => 'application/json']
             );
         }
-        $em->persist($student);
+        $em->persist($user);
         $em->flush();
         return $this->json(
-            $student->getDataStudent(),
+            $user->getDataUser(),
             Response::HTTP_OK,
-            ['Content-Type' => 'application/json']
-        );
-    }
-
-    /**
-     * @Route("/dni/{dni}", name="student_by_dni", methods={"GET"})
-     */
-    public function studentByDNI($dni, StudentsRepository $studentsRepository, Request $request, EntityManagerInterface $em): JsonResponse
-    {
-        if (!(int)$dni) {
-            return $this->json(
-                [
-                    "status" => false,
-                    'message' => 'Debe ingresar un id valido.',
-                ],
-                Response::HTTP_BAD_REQUEST,
-                ['Content-Type' => 'application/json']
-            );
-        }
-
-        $student = $studentsRepository->findOneBy(['dni' => $dni]);
-        if (!$student) {
-            return $this->json(
-                [
-                    "status" => false,
-                    'message' => 'Usuario no encontrado.',
-                ],
-                Response::HTTP_NOT_FOUND,
-                ['Content-Type' => 'application/json']
-            );
-        }
-        return $this->json(
-            $student->getDataStudent(),
-            Response::HTTP_ACCEPTED,
             ['Content-Type' => 'application/json']
         );
     }

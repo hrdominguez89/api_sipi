@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,7 +59,16 @@ class ApiLoginController extends AbstractController
                 ['Content-Type' => 'application/json']
             );
         }
-
+        if (!$user->isActive()) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Su cuenta se encuentra deshabilitada.',
+                ],
+                Response::HTTP_FORBIDDEN,
+                ['Content-Type' => 'application/json']
+            );
+        }
         $jwt = $jwtManager->create($user);
 
         return new JsonResponse([
@@ -70,6 +80,7 @@ class ApiLoginController extends AbstractController
                 "fullname" => $user->getFullname(),
                 "rol_id" => (int) $user->getRol()->getId(),
                 "rol_name" => $user->getRol()->getName(),
+                "email" => $user->getEmail()
             ]
         ]);
     }

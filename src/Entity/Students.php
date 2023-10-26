@@ -6,9 +6,12 @@ use App\Repository\StudentsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=StudentsRepository::class)
+ * 
+ * @UniqueEntity(fields="dni", message="El DNI indicado, ya se encuentra registrado.")
  */
 class Students
 {
@@ -20,7 +23,8 @@ class Students
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * 
+     * @ORM\Column(type="integer", unique=true)
      */
     private $dni;
 
@@ -96,5 +100,14 @@ class Students
         }
 
         return $this;
+    }
+
+    public function getDataStudent() : array
+    {
+        return [
+            'id' => $this->getId(),
+            'dni' => $this->getDni(),
+            'fullname' => $this->getFullname()
+        ];
     }
 }

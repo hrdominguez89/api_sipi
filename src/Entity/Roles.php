@@ -80,4 +80,12 @@ class Roles
 
         return $this;
     }
+
+    public function getDataRoles(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName()
+        ];
+    }
 }

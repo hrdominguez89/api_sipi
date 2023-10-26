@@ -9,8 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * 
+ * @UniqueEntity(fields="email", message="El E-Mail indicado, ya se encuentra registrado.")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -65,6 +69,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->requests = new ArrayCollection();
+        $this->roles = ["ROLE_USER"];
+        $this->createdAt = new \DateTime();
+        $this->active = true;
     }
 
     public function getId(): ?int
@@ -139,7 +146,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setPassword(string $password): self
     {
-        $this->password = $password;
+        $this->password = password_hash($password, PASSWORD_BCRYPT);
 
         return $this;
     }
@@ -228,5 +235,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->active = $active;
 
         return $this;
+    }
+
+    public function getDataUser(): array
+    {
+        return [
+            "id" => $this->getId(),
+            "email" => $this->getEmail(),
+            "fullname" => $this->getFullname(),
+            "created_at" => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            "rol_id" => $this->getRol() ? $this->getRol()->getId() : null,
+            "rol_name" => $this->getRol() ? $this->getRol()->getName() : null,
+            "active" => $this->isActive()
+        ];
     }
 }

@@ -80,4 +80,12 @@ class StatusComputer
 
         return $this;
     }
+
+    public function getDataStatus(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName()
+        ];
+    }
 }
