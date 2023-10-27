@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: api_sipi
+    ports:
+      - '80:80'
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+  database:
+    image: mariadb:10.4
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: api_sipi
+    ports:
+     - '3306:3306'
+    networks:
+      - app-network
+    volumes:
+      - ./doc/db/:/docker-entrypoint-initdb.d/:ro
+  
+  phpmyadmin:
+    image: phpmyadmin:5.1.1
+    depends_on:
+      - database
+    environment:
+      PMA_HOST: database
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - 8080:80
+    networks:
+      - app-network
+    links:
+      - database:database
+
+networks:
+  app-network:
