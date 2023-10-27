@@ -30,7 +30,7 @@ class Programs
     private $version;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
      */
     private $createdAt;
 
@@ -47,6 +47,7 @@ class Programs
     public function __construct()
     {
         $this->programsComputers = new ArrayCollection();
+        $this->createdAt =  new \DateTime();
     }
 
     public function getId(): ?int
@@ -130,5 +131,15 @@ class Programs
         }
 
         return $this;
+    }
+
+    public function getDataPrograms(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'version' => $this->getVersion(),
+            'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s')
+        ];
     }
 }

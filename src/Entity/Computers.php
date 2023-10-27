@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Constants\Constants;
 use App\Repository\ComputersRepository;
+use App\Repository\StatusComputerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -51,7 +53,7 @@ class Computers
     private $statusComputer;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
      */
     private $createdAt;
 
@@ -69,6 +71,7 @@ class Computers
     {
         $this->programsComputers = new ArrayCollection();
         $this->requestsComputers = new ArrayCollection();
+        $this->createdAt =  new \DateTime();
     }
 
     public function getId(): ?int
@@ -218,5 +221,20 @@ class Computers
         }
 
         return $this;
+    }
+
+    public function getDataComputers(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'brand' => $this->getBrand(),
+            'model' => $this->getModel(),
+            'serie' => $this->getSerie(),
+            'details' => $this->getDetails(),
+            'status_computer_id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
+            'status_computer_name' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
+            'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s')
+        ];
     }
 }

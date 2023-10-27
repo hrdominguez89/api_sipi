@@ -10,12 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/status")
+ * @Route("/api/statusTypes")
  */
 class StatusTypesController extends AbstractController
 {
     /**
-     * @Route("/computers", name="status_types_computers")
+     * @Route("/computers", name="status_types_computers", methods={"GET"})
      */
     public function computers(StatusComputerRepository $statusComputerRepository): JsonResponse
     {
@@ -32,7 +32,7 @@ class StatusTypesController extends AbstractController
     }
 
     /**
-     * @Route("/requests", name="status_types_requests")
+     * @Route("/requests", name="status_types_requests", methods={"GET"})
      */
     public function requests(StatusRequestRepository $statusRequestRepository): JsonResponse
     {
