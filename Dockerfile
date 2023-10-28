@@ -42,6 +42,8 @@ COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
 
 RUN cd /var/www/html && composer install
 RUN php /var/www/html/bin/console cache:clear
+
+RUN apt-get install openssl
 # RUN php /var/www/html/bin/console doctrine:migration:migrate --no-interaction
 
 
