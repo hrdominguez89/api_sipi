@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 
 # Instalar dependencias requeridas por Symfony
 RUN apt-get update && \
-        DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --reinstall ca-certificates \
         apache2 \
         unzip \
         libicu-dev \
