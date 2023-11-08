@@ -34,7 +34,7 @@ services:
       PMA_USER: root
       PMA_PASSWORD: root
     ports:
-      - 8080:80
+      - 8082:80
     networks:
       - app-network
     links:
