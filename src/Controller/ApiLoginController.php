@@ -77,6 +77,7 @@ class ApiLoginController extends AbstractController
             "token_type" => "Bearer",
             "expires_in" => (int)$_ENV['JWT_TOKEN_TTL'],
             "user_data" => [
+                "id" => $user->getId(),
                 "fullname" => $user->getFullname(),
                 "rol_id" => (int) $user->getRol()->getId(),
                 "rol_name" => $user->getRol()->getName(),
