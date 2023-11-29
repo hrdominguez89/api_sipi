@@ -38,6 +38,11 @@ class Students
      */
     private $requestsComputers;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $visible;
+
     public function __construct()
     {
         $this->requestsComputers = new ArrayCollection();
@@ -109,5 +114,17 @@ class Students
             'dni' => $this->getDni(),
             'fullname' => $this->getFullname()
         ];
+    }
+
+    public function isVisible(): ?bool
+    {
+        return $this->visible;
+    }
+
+    public function setVisible(?bool $visible): self
+    {
+        $this->visible = $visible;
+
+        return $this;
     }
 }

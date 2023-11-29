@@ -67,6 +67,11 @@ class Computers
      */
     private $requestsComputers;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true,options={"default":TRUE})
+     */
+    private $visible;
+
     public function __construct()
     {
         $this->programsComputers = new ArrayCollection();
@@ -236,5 +241,17 @@ class Computers
             'status_computer_name' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
             'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s')
         ];
+    }
+
+    public function isVisible(): ?bool
+    {
+        return $this->visible;
+    }
+
+    public function setVisible(?bool $visible): self
+    {
+        $this->visible = $visible;
+
+        return $this;
     }
 }

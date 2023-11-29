@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Computers;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Constants\Constants;
 
 /**
  * @extends ServiceEntityRepository<Computers>
@@ -39,20 +40,18 @@ class ComputersRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Computers[] Returns an array of Computers objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+    * @return Computers[] Returns an array of Computers objects
+    */
+   public function getAllComputers(): array
+   {
+       return $this->createQueryBuilder('c')
+           ->where('c.visible = true')
+           ->orderBy('c.id', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
 //    public function findOneBySomeField($value): ?Computers
 //    {

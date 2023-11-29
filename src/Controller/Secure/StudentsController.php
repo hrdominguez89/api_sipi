@@ -33,7 +33,7 @@ class StudentsController extends AbstractController
     public function index(StudentsRepository $studentsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if ($request->getMethod() == 'GET') {
-            $students = $studentsRepository->findAll();
+            $students = $studentsRepository->getAllStudents();
             $data = [];
             foreach ($students as $student) {
                 $data[] = $student->getDataStudent();
@@ -170,6 +170,44 @@ class StudentsController extends AbstractController
         return $this->json(
             $student->getDataStudent(),
             Response::HTTP_ACCEPTED,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    /**
+     * @Route("/delete/{student_id}", name="delete_student_by_id", methods={"DELETE"})
+     */
+    public function deleteComputerById($student_id, StudentsRepository $studensRepository, EntityManagerInterface $em): JsonResponse
+    {
+        if (!(int)$student_id) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Debe ingresar un id valido.',
+                ],
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $studen = $studensRepository->find($student_id);
+        if (!$studen) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Estudiante no encontrado.',
+                ],
+                Response::HTTP_NOT_FOUND,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $studen->setVisible(false);
+        $em->persist($studen);
+        $em->flush();
+        return $this->json(
+            ['message'=>'Estudiante eliminado correctamente'],
+            Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );
     }

@@ -32,7 +32,7 @@ class ProgramsController extends AbstractController
     public function programs(ProgramsRepository $programsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if ($request->getMethod() == 'GET') {
-            $programs = $programsRepository->findAll();
+            $programs = $programsRepository->getAllPrograms();
             $data = [];
             foreach ($programs as $program) {
                 $data[] = $program->getDataPrograms();
@@ -136,6 +136,44 @@ class ProgramsController extends AbstractController
         $em->flush();
         return $this->json(
             $program->getDataPrograms(),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    /**
+     * @Route("/delete/{program_id}", name="delete_program_by_id", methods={"DELETE"})
+     */
+    public function deleteComputerById($program_id, ProgramsRepository $programsRepository, EntityManagerInterface $em): JsonResponse
+    {
+        if (!(int)$program_id) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Debe ingresar un id valido.',
+                ],
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $program = $programsRepository->find($program_id);
+        if (!$program) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Programa no encontrada.',
+                ],
+                Response::HTTP_NOT_FOUND,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $program->setVisible(false);
+        $em->persist($program);
+        $em->flush();
+        return $this->json(
+            ['message' => 'Programa eliminado correctamente'],
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );

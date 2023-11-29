@@ -44,6 +44,11 @@ class Programs
      */
     private $programsComputers;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default":TRUE})
+     */
+    private $visible;
+
     public function __construct()
     {
         $this->programsComputers = new ArrayCollection();
@@ -141,5 +146,17 @@ class Programs
             'version' => $this->getVersion(),
             'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s')
         ];
+    }
+
+    public function isVisible(): ?bool
+    {
+        return $this->visible;
+    }
+
+    public function setVisible(?bool $visible): self
+    {
+        $this->visible = $visible;
+
+        return $this;
     }
 }

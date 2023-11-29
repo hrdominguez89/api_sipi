@@ -33,7 +33,7 @@ class ComputersController extends AbstractController
     public function computers(StatusComputerRepository $statusComputerRepository, ComputersRepository $computersRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if ($request->getMethod() == 'GET') {
-            $computers = $computersRepository->findAll();
+            $computers = $computersRepository->getAllComputers();
             $data = [];
             foreach ($computers as $computer) {
                 $data[] = $computer->getDataComputers();
@@ -104,7 +104,7 @@ class ComputersController extends AbstractController
             return $this->json(
                 [
                     "status" => false,
-                    'message' => 'Usuario no encontrado.',
+                    'message' => 'Computadora no encontrada.',
                 ],
                 Response::HTTP_NOT_FOUND,
                 ['Content-Type' => 'application/json']
@@ -148,6 +148,44 @@ class ComputersController extends AbstractController
         $em->flush();
         return $this->json(
             $computer->getDataComputers(),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    /**
+     * @Route("/delete/{computer_id}", name="delete_computer_by_id", methods={"DELETE"})
+     */
+    public function deleteComputerById($computer_id, ComputersRepository $computersRepository, EntityManagerInterface $em): JsonResponse
+    {
+        if (!(int)$computer_id) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Debe ingresar un id valido.',
+                ],
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $computer = $computersRepository->find($computer_id);
+        if (!$computer) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Computadora no encontrada.',
+                ],
+                Response::HTTP_NOT_FOUND,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $computer->setVisible(false);
+        $em->persist($computer);
+        $em->flush();
+        return $this->json(
+            ['message'=>'Computadora eliminada correctamente'],
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );
