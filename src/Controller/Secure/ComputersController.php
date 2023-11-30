@@ -185,7 +185,7 @@ class ComputersController extends AbstractController
         $em->persist($computer);
         $em->flush();
         return $this->json(
-            ['message'=>'Computadora eliminada correctamente'],
+            ['message' => 'Computadora eliminada correctamente'],
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );

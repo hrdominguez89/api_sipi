@@ -12,8 +12,6 @@ services:
       - database
     networks:
       - app-network
-    volumes:
-      - ./:/var/www/html
 
   database:
     image: mariadb:10.4
