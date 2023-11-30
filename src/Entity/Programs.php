@@ -145,6 +145,7 @@ class Programs
             'id' => $this->getId(),
             'name' => $this->getName(),
             'version' => $this->getVersion(),
+            'observations' => $this->getObservations(),
             'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s')
         ];
     }
