@@ -122,7 +122,7 @@ class RequestsController extends AbstractController
     }
 
     /**
-     * @Route("/review/{request_id}", name="request", methods={"POST"})
+     * @Route("/review/{request_id}", name="request_review", methods={"POST"})
      */
     public function review($request_id, StatusRequestRepository $statusRequestRepository, RequestsRepository $requestsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -174,7 +174,7 @@ class RequestsController extends AbstractController
                 ['Content-Type' => 'application/json']
             );
         }
-        
+
         return $this->json(
             'Su cuenta no tiene permisos para realizar esta operación',
             Response::HTTP_FORBIDDEN,
