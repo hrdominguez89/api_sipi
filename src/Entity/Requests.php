@@ -188,11 +188,26 @@ class Requests
     public function getRequestData()
     {
         return [
+            'id' => $this->getId(),
             'programas_solicitados' => $this->getRequestedPrograms(),
             'equipos_solicitados' => $this->getRequestedAmount(),
             'solicitado_el' => $this->getCreatedAt()->format('Y-m-d'),
             'solicitado_para_el' => $this->getRequestedDate()->format('Y-m-d'),
             'estado' => $this->getStatusRequest()->getName()
+        ];
+    }
+
+    public function getRequestDataAdmin()
+    {
+        return [
+            'id' => $this->getId(),
+            'programas_solicitados' => $this->getRequestedPrograms(),
+            'equipos_solicitados' => $this->getRequestedAmount(),
+            'solicitado_el' => $this->getCreatedAt()->format('Y-m-d'),
+            'solicitado_para_el' => $this->getRequestedDate()->format('Y-m-d'),
+            'estado' => $this->getStatusRequest()->getName(),
+            'observaciones' => $this->getObservations(),
+            'profesor' => $this->getProfessor()->getFullname()
         ];
     }
 }

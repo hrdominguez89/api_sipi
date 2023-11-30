@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Constants\Constants;
 use App\Entity\Requests;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -48,6 +49,19 @@ class RequestsRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->where('r.professor = :val')
             ->setParameter('val', $profesor_id)
+            ->orderBy('r.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Requests[] Returns an array of Requests objects
+     */
+    public function findRequestsPending()
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.statusRequest = :val')
+            ->setParameter('val', Constants::STATUS_REQUEST_PENDING)
             ->orderBy('r.id', 'DESC')
             ->getQuery()
             ->getResult();

@@ -48,14 +48,13 @@ class RequestsController extends AbstractController
      */
     public function index(StatusRequestRepository $statusRequestRepository, RequestsRepository $requestsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $this->user;
 
         if ($this->user->getRol()->getId() == Constants::ROLE_PROFESSOR) {
             if ($request->getMethod() == 'GET') {
                 $requests = $requestsRepository->findRequestsByUserId($this->user->getId());
                 $data = [];
-                foreach ($requests as $request) {
-                    $data[] = $request->getRequestData();
+                foreach ($requests as $requestBd) {
+                    $data[] = $requestBd->getRequestData();
                 }
                 return $this->json(
                     $data,
@@ -64,23 +63,20 @@ class RequestsController extends AbstractController
                 );
             }
 
+            //si es POST
+
             $body = $request->getContent();
             $data = json_decode($body, true);
 
             //creo el formulario para hacer las validaciones    
-            $request = new Requests();
+            $requestBd = new Requests();
 
             $statusRequest = $statusRequestRepository->find(Constants::STATUS_REQUEST_PENDING);
 
-            // $request->setRequestedDate(@$data['requestedDate']);
-            // $request->setRequestedAmount(@$data['requestedAmount']);
-            // $request->setRequestedPrograms(@$data['requestedPrograms']);
-            // $request->setObservations(@$data['observations']);
-            $request->setStatusRequest(@$statusRequest);
-            $request->setProfessor(@$this->user->getId());
-            // $request->setProfessor(@$data['professor']);
+            $requestBd->setStatusRequest(@$statusRequest);
+            $requestBd->setProfessor(@$this->user->getId());
 
-            $form = $this->createForm(RequestType::class, $request);
+            $form = $this->createForm(RequestType::class, $requestBd);
             $form->submit($data, false);
 
             if (!$form->isValid()) {
@@ -94,7 +90,7 @@ class RequestsController extends AbstractController
                     ['Content-Type' => 'application/json']
                 );
             }
-            $em->persist($request);
+            $em->persist($requestBd);
             $em->flush();
 
             return $this->json(
@@ -104,61 +100,85 @@ class RequestsController extends AbstractController
             );
         }
 
+        //si soy admin o bedele puedo ver todas las solicitudes pendientes.
 
-
+        if ($request->getMethod() == 'GET') {
+            $requests = $requestsRepository->findRequestsPending();
+            $data = [];
+            foreach ($requests as $requestBd) {
+                $data[] = $requestBd->getRequestDataAdmin();
+            }
+            return $this->json(
+                $data,
+                Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        }
         return $this->json(
-            $this->user->getRol()->getId(),
-            Response::HTTP_CREATED,
+            'Su cuenta no tiene permisos para realizar esta operación',
+            Response::HTTP_FORBIDDEN,
             ['Content-Type' => 'application/json']
         );
+    }
 
-        // if ($request->getMethod() == 'GET') {
-        //     $users = $userRepository->findAll();
-        //     $data = [];
-        //     foreach ($users as $user) {
-        //         $data[] = $user->getDataUser();
-        //     }
-        //     return $this->json(
-        //         $data,
-        //         Response::HTTP_OK,
-        //         ['Content-Type' => 'application/json']
-        //     );
-        // }
+    /**
+     * @Route("/review/{request_id}", name="request", methods={"POST"})
+     */
+    public function review($request_id, StatusRequestRepository $statusRequestRepository, RequestsRepository $requestsRepository, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        if (!(int)$request_id) {
+            return $this->json(
+                [
+                    'message' => 'El id ingresado no es valido',
+                ],
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
 
-        // $body = $request->getContent();
-        // $data = json_decode($body, true);
+        $requestBd = $requestsRepository->find($request_id);
+        if (!$requestBd) {
+            return $this->json(
+                [
+                    'message' => 'El id ingresado no se encuentra',
+                ],
+                Response::HTTP_NOT_FOUND,
+                ['Content-Type' => 'application/json']
+            );
+        }
 
-        // //creo el formulario para hacer las validaciones
+        if ($this->user->getRol()->getId() != Constants::ROLE_PROFESSOR) {
 
-        // $rol = null;
-        // if (@$data['rol']) {
-        //     $rol = $rolesRepository->find(@$data['rol']);
-        // }
-        // $user = new User();
-        // $user->setEmail(@$data['email']);
-        // $user->setFullname(@$data['fullname']);
-        // $user->setRol(@$rol);
+            $body = $request->getContent();
+            $data = json_decode($body, true);
 
-        // $form = $this->createForm(UserType::class, $user);
-        // $form->submit($data, false);
+            if (!$data['status']) {
+                return $this->json(
+                    [
+                        'message' => 'Error al enviar los datos, se espera un valor de STATUS: true o false',
+                    ],
+                    Response::HTTP_BAD_REQUEST,
+                    ['Content-Type' => 'application/json']
+                );
+            }
+            $statusRequest = $statusRequestRepository->find($data['status'] ? Constants::STATUS_REQUEST_ACCEPTED : Constants::STATUS_REQUEST_REJECTED);
 
-        // if (!$form->isValid()) {
-        //     $error_forms = $this->formErrorsUtil->getErrorsFromForm($form);
-        //     return $this->json(
-        //         [
-        //             'message' => 'Error de validación.',
-        //             'validation' => $error_forms
-        //         ],
-        //         Response::HTTP_BAD_REQUEST,
-        //         ['Content-Type' => 'application/json']
-        //     );
-        // }
-        // $em->persist($user);
-        // $em->flush();
-        // return $this->json(
-        //     $user->getDataUser(),
-        //     Response::HTTP_CREATED,
-        //     ['Content-Type' => 'application/json']
-        // );
+            $requestBd->setStatusRequest($statusRequest);
+
+            $em->persist($requestBd);
+            $em->flush();
+
+            return $this->json(
+                ['Message' => $data['status'] ? 'Solicitud aprobada correctamente' : 'Solicitud Rechazada correctamente'],
+                Response::HTTP_CREATED,
+                ['Content-Type' => 'application/json']
+            );
+        }
+        
+        return $this->json(
+            'Su cuenta no tiene permisos para realizar esta operación',
+            Response::HTTP_FORBIDDEN,
+            ['Content-Type' => 'application/json']
+        );
     }
 }
