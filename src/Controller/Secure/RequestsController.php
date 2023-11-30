@@ -94,7 +94,7 @@ class RequestsController extends AbstractController
             $em->flush();
 
             return $this->json(
-                ['Message' => 'Solicitud creada con éxito'],
+                ['message' => 'Solicitud creada con éxito'],
                 Response::HTTP_CREATED,
                 ['Content-Type' => 'application/json']
             );
@@ -170,7 +170,7 @@ class RequestsController extends AbstractController
 
             return $this->json(
                 ['Message' => $data['status'] ? 'Solicitud aprobada correctamente' : 'Solicitud Rechazada correctamente'],
-                Response::HTTP_CREATED,
+                Response::HTTP_ACCEPTED,
                 ['Content-Type' => 'application/json']
             );
         }
