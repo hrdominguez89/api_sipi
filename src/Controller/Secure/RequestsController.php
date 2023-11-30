@@ -115,7 +115,7 @@ class RequestsController extends AbstractController
             );
         }
         return $this->json(
-            'Su cuenta no tiene permisos para realizar esta operación',
+            ['message' => 'Su cuenta no tiene permisos para realizar esta operación'],
             Response::HTTP_FORBIDDEN,
             ['Content-Type' => 'application/json']
         );
@@ -176,7 +176,7 @@ class RequestsController extends AbstractController
         }
 
         return $this->json(
-            'Su cuenta no tiene permisos para realizar esta operación',
+            ['message' => 'Su cuenta no tiene permisos para realizar esta operación'],
             Response::HTTP_FORBIDDEN,
             ['Content-Type' => 'application/json']
         );
