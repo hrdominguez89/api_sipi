@@ -49,7 +49,7 @@ class RequestsController extends AbstractController
     public function index(StatusRequestRepository $statusRequestRepository, RequestsRepository $requestsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
 
-        if ($this->user->getRol()->getId() == Constants::ROLE_PROFESSOR) {
+        if ($this->user->getRol()->getId() != Constants::ROLE_PROFESSOR) {
             if ($request->getMethod() == 'GET') {
                 $requests = $requestsRepository->findRequestsByUserId($this->user->getId());
                 $data = [];
@@ -74,7 +74,7 @@ class RequestsController extends AbstractController
             $statusRequest = $statusRequestRepository->find(Constants::STATUS_REQUEST_PENDING);
 
             $requestBd->setStatusRequest(@$statusRequest);
-            $requestBd->setProfessor(@$this->user->getId());
+            $requestBd->setProfessor(@$this->user);
 
             $form = $this->createForm(RequestType::class, $requestBd);
             $form->submit($data, false);
