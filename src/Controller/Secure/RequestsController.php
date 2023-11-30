@@ -49,7 +49,7 @@ class RequestsController extends AbstractController
     public function index(StatusRequestRepository $statusRequestRepository, RequestsRepository $requestsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
 
-        if ($this->user->getRol()->getId() != Constants::ROLE_PROFESSOR) {
+        if ($this->user->getRol()->getId() == Constants::ROLE_PROFESSOR) {
             if ($request->getMethod() == 'GET') {
                 $requests = $requestsRepository->findRequestsByUserId($this->user->getId());
                 $data = [];
