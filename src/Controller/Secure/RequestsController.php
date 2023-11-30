@@ -122,7 +122,7 @@ class RequestsController extends AbstractController
     }
 
     /**
-     * @Route("/review/{request_id}", name="request_review", methods={"POST"})
+     * @Route("/review/{request_id}", name="request_review", methods={"PATCH"})
      */
     public function review($request_id, StatusRequestRepository $statusRequestRepository, RequestsRepository $requestsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -171,6 +171,35 @@ class RequestsController extends AbstractController
             return $this->json(
                 ['Message' => $data['status'] ? 'Solicitud aprobada correctamente' : 'Solicitud Rechazada correctamente'],
                 Response::HTTP_ACCEPTED,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        return $this->json(
+            ['message' => 'Su cuenta no tiene permisos para realizar esta operación'],
+            Response::HTTP_FORBIDDEN,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    /**
+     * @Route("/calendar", name="calendar_request", methods={"GET"})
+     */
+    public function calendar(RequestsRepository $requestsRepository): JsonResponse
+    {
+
+        $requests = $requestsRepository->findRequestsAcepted();
+
+        $requestCalendar = [];
+
+        foreach ($requests as $requestBd) {
+            $requestCalendar[] = $requestBd->getCalendarData();
+        }
+
+        if ($this->user->getRol()->getId() != Constants::ROLE_PROFESSOR) {
+            return $this->json(
+                $requestCalendar,
+                Response::HTTP_OK,
                 ['Content-Type' => 'application/json']
             );
         }

@@ -210,4 +210,14 @@ class Requests
             'profesor' => $this->getProfessor()->getFullname()
         ];
     }
+
+    public function getCalendarData()
+    {
+        return [
+            'id' => $this->getId(),
+            'equipos_solicitados' => $this->getRequestedAmount(),
+            'fecha_evento' => $this->getRequestedDate()->format('Y-m-d'),
+            'profesor' => $this->getProfessor()->getFullname(),
+        ];
+    }
 }

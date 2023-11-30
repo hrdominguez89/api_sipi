@@ -67,6 +67,19 @@ class RequestsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return Requests[] Returns an array of Requests objects
+     */
+    public function findRequestsAcepted()
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.statusRequest = :val')
+            ->setParameter('val', Constants::STATUS_REQUEST_ACCEPTED)
+            ->orderBy('r.requestedDate', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Requests[] Returns an array of Requests objects
     //     */
