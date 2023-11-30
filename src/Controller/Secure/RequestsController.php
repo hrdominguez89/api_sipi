@@ -152,7 +152,7 @@ class RequestsController extends AbstractController
             $body = $request->getContent();
             $data = json_decode($body, true);
 
-            if (!$data['status']) {
+            if (!isset($data['status'])) {
                 return $this->json(
                     [
                         'message' => 'Error al enviar los datos, se espera un valor de STATUS: true o false',
