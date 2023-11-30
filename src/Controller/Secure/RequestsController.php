@@ -50,7 +50,7 @@ class RequestsController extends AbstractController
     {
         $this->user;
 
-        if ($this->user->getRol()->getId() != Constants::ROLE_PROFESSOR) {
+        if ($this->user->getRol()->getId() == Constants::ROLE_PROFESSOR) {
             if ($request->getMethod() == 'GET') {
                 $requests = $requestsRepository->findRequestsByUserId($this->user->getId());
                 $data = [];
