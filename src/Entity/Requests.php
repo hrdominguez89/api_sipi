@@ -46,7 +46,7 @@ class Requests
     private $statusRequest;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
      */
     private $createdAt;
 
@@ -63,6 +63,7 @@ class Requests
     public function __construct()
     {
         $this->requestsComputers = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -182,5 +183,16 @@ class Requests
         $this->professor = $professor;
 
         return $this;
+    }
+
+    public function getRequestData()
+    {
+        return [
+            'programas_solicitados' => $this->getRequestedPrograms(),
+            'equipos_solicitados' => $this->getRequestedAmount(),
+            'solicitado_el' => $this->getCreatedAt()->format('Y-m-d'),
+            'solicitado_para_el' => $this->getRequestedDate()->format('Y-m-d'),
+            'estado' => $this->getStatusRequest()->getName()
+        ];
     }
 }
