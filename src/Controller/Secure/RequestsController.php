@@ -77,6 +77,7 @@ class RequestsController extends AbstractController
             // $request->setRequestedPrograms(@$data['requestedPrograms']);
             // $request->setObservations(@$data['observations']);
             $request->setStatusRequest(@$statusRequest);
+            $request->setProfessor(@$this->user->getId());
             // $request->setProfessor(@$data['professor']);
 
             $form = $this->createForm(RequestType::class, $request);

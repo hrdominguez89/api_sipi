@@ -46,7 +46,7 @@ class RequestType extends AbstractType
             ])
             ->add('observations', TextType::class, [
                 'required' => false
-            ])
+            ]);
             // ->add('statusRequest', EntityType::class, [
             //     'class' => StatusRequest::class,
             //     'required' => true,
@@ -55,13 +55,13 @@ class RequestType extends AbstractType
             //         new NotBlank(),
             //     ]
             // ])
-            ->add('professor', EntityType::class, [
-                'class' => User::class,
-                'constraints' => [
-                    new NotNull(),
-                    new NotBlank(),
-                ]
-            ]);
+            // ->add('professor', EntityType::class, [
+            //     'class' => User::class,
+            //     'constraints' => [
+            //         new NotNull(),
+            //         new NotBlank(),
+            //     ]
+            // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
