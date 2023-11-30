@@ -77,6 +77,7 @@ class Computers
         $this->programsComputers = new ArrayCollection();
         $this->requestsComputers = new ArrayCollection();
         $this->createdAt =  new \DateTime();
+        $this->visible =  true;
     }
 
     public function getId(): ?int

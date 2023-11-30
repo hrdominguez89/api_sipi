@@ -39,13 +39,14 @@ class Students
     private $requestsComputers;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="boolean", nullable=true, options={"default":TRUE})
      */
     private $visible;
 
     public function __construct()
     {
         $this->requestsComputers = new ArrayCollection();
+        $this->visible =  true;
     }
 
     public function getId(): ?int
@@ -107,7 +108,7 @@ class Students
         return $this;
     }
 
-    public function getDataStudent() : array
+    public function getDataStudent(): array
     {
         return [
             'id' => $this->getId(),
