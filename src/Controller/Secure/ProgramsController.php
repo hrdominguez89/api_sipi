@@ -118,7 +118,7 @@ class ProgramsController extends AbstractController
         $program->setVersion(@$data['version'] ?: $program->getVersion());
         $program->setObservations(@$data['observations'] ?: $program->getObservations());
 
-        $form = $this->createForm(StudentType::class, $program);
+        $form = $this->createForm(ProgramsType::class, $program);
         $form->submit($data, false);
 
         if (!$form->isValid()) {

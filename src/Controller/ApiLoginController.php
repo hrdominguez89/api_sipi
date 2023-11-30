@@ -65,7 +65,7 @@ class ApiLoginController extends AbstractController
                     "status" => false,
                     'message' => 'Su cuenta se encuentra deshabilitada.',
                 ],
-                Response::HTTP_FORBIDDEN,
+                Response::HTTP_BAD_REQUEST,
                 ['Content-Type' => 'application/json']
             );
         }

@@ -34,7 +34,7 @@ class UsersController extends AbstractController
     public function index(UserRepository $userRepository, RolesRepository $rolesRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if ($request->getMethod() == 'GET') {
-            $users = $userRepository->findAll();
+            $users = $userRepository->getAllUsers();
             $data = [];
             foreach ($users as $user) {
                 $data[] = $user->getDataUser();
