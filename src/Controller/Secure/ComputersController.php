@@ -5,12 +5,14 @@ namespace App\Controller\Secure;
 use App\Constants\Constants;
 use App\Entity\Computers;
 use App\Entity\RequestsComputers;
+use App\Entity\User;
 use App\Entity\StatusComputer;
 use App\Form\ComputersType;
 use App\Repository\ComputersRepository;
 use App\Repository\RequestsComputersRepository;
 use App\Repository\RequestsRepository;
 use App\Repository\StatusComputerRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +20,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Utils\FormErrorsUtil;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @Route("/api/computers")
@@ -26,9 +30,18 @@ class ComputersController extends AbstractController
 {
     private $formErrorsUtil;
 
-    public function __construct(FormErrorsUtil $formErrorsUtil)
+
+    public function __construct(JWTEncoderInterface $jwtEncoder, UserRepository $userRepository, RequestStack $requestStack, FormErrorsUtil $formErrorsUtil)
     {
         $this->formErrorsUtil = $formErrorsUtil;
+
+        $request = $requestStack->getCurrentRequest();
+
+        $token = explode(' ', $request->headers->get('Authorization'))[1];
+
+        $username = @$jwtEncoder->decode($token)['username'] ?: '';
+
+        $this->user = $userRepository->findOneBy(['email' => $username]);
     }
 
     /**
@@ -114,16 +127,17 @@ class ComputersController extends AbstractController
      */
     public function computersNotAvailable(
         RequestsComputersRepository $requestsComputersRepository,
-        ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository): JsonResponse
-    {
+        ComputersRepository $computersRepository,
+        StatusComputerRepository $statusComputerRepository
+    ): JsonResponse {
 
-        $computersNotAvailable = $requestsComputersRepository->findNotAvailable();
+        $computers_NotAvailable = $requestsComputersRepository->findNotAvailable();
 
-        $computers=[];
+        $computers = [];
 
-        // foreach($computersNotAvailable as $computer){
-        //     $computers[]= $computer->->getComputer()->getDataComputers();
-        // }
+        foreach ($computers_NotAvailable as $computer) {
+            $computers[] = $computer->getComputer()->getDataComputers();
+        }
 
         return $this->json(
             $computers[],
@@ -135,7 +149,7 @@ class ComputersController extends AbstractController
     /**
      * @Route("/requests", name="request_computer", methods={"POST"})
      */
-    public function requestComputer(Request $request, RequestsRepository $requestsRepository, ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository,EntityManagerInterface $em): JsonResponse
+    public function requestComputer(Request $request, RequestsRepository $requestsRepository, ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository, EntityManagerInterface $em): JsonResponse
     {
         if ($this->user->getRol()->getId() != Constants::ROLE_PROFESSOR) {
 
@@ -289,6 +303,4 @@ class ComputersController extends AbstractController
             ['Content-Type' => 'application/json']
         );
     }
-
-    
 }
