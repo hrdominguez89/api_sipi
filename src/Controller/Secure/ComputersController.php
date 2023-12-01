@@ -195,7 +195,7 @@ class ComputersController extends AbstractController
     }
 
     /**
-     * @Route("/available", name="computers_by_id", methods={"GET"})
+     * @Route("/available", name="computers_available", methods={"GET"})
      */
     public function computersAvailable(ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository): JsonResponse
     {
@@ -217,7 +217,7 @@ class ComputersController extends AbstractController
     }
 
     /**
-     * @Route("/notavailable", name="computers_by_id", methods={"GET"})
+     * @Route("/notavailable", name="computers_not_available", methods={"GET"})
      */
     public function computersNotAvailable(
         RequestsComputersRepository $requestsComputersRepository,
