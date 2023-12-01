@@ -229,7 +229,7 @@ class Computers
         return $this;
     }
 
-    public function getDataComputers($data): array
+    public function getDataComputers($data = false): array
     {
         if ($data) {
             return [
