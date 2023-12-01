@@ -83,6 +83,46 @@ class UsersController extends AbstractController
         );
     }
 
+
+    /**
+     * @Route("/delete/{user_id}", name="delete_user_by_id", methods={"DELETE"})
+     */
+    public function deleteUserById($user_id, UserRepository $userRepository, EntityManagerInterface $em): JsonResponse
+    {
+        if (!(int)$user_id) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Debe ingresar un id valido.',
+                ],
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $user = $userRepository->find($user_id);
+        if (!$user) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Usuario no encontrado.',
+                ],
+                Response::HTTP_NOT_FOUND,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $user->setActive(false);
+        $em->persist($user);
+        $em->flush();
+        return $this->json(
+            ['message' => 'Usuario eliminado correctamente'],
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    
     /**
      * @Route("/{user_id}", name="user_by_id", methods={"GET","PATCH"})
      */
@@ -142,44 +182,6 @@ class UsersController extends AbstractController
         $em->flush();
         return $this->json(
             $user->getDataUser(),
-            Response::HTTP_OK,
-            ['Content-Type' => 'application/json']
-        );
-    }
-
-    /**
-     * @Route("/delete/{user_id}", name="delete_user_by_id", methods={"DELETE"})
-     */
-    public function deleteUserById($user_id, UserRepository $userRepository, EntityManagerInterface $em): JsonResponse
-    {
-        if (!(int)$user_id) {
-            return $this->json(
-                [
-                    "status" => false,
-                    'message' => 'Debe ingresar un id valido.',
-                ],
-                Response::HTTP_BAD_REQUEST,
-                ['Content-Type' => 'application/json']
-            );
-        }
-
-        $user = $userRepository->find($user_id);
-        if (!$user) {
-            return $this->json(
-                [
-                    "status" => false,
-                    'message' => 'Usuario no encontrado.',
-                ],
-                Response::HTTP_NOT_FOUND,
-                ['Content-Type' => 'application/json']
-            );
-        }
-
-        $user->setActive(false);
-        $em->persist($user);
-        $em->flush();
-        return $this->json(
-            ['message' => 'Usuario eliminado correctamente'],
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );
