@@ -77,70 +77,6 @@ class StudentsController extends AbstractController
     }
 
     /**
-     * @Route("/{student_id}", name="student_by_id", methods={"GET","PATCH"})
-     */
-    public function studentById($student_id, StudentsRepository $studentsRepository, Request $request, EntityManagerInterface $em): JsonResponse
-    {
-        if (!(int)$student_id) {
-            return $this->json(
-                [
-                    "status" => false,
-                    'message' => 'Debe ingresar un id valido.',
-                ],
-                Response::HTTP_BAD_REQUEST,
-                ['Content-Type' => 'application/json']
-            );
-        }
-
-        $student = $studentsRepository->find($student_id);
-        if (!$student) {
-            return $this->json(
-                [
-                    "status" => false,
-                    'message' => 'Usuario no encontrado.',
-                ],
-                Response::HTTP_NOT_FOUND,
-                ['Content-Type' => 'application/json']
-            );
-        }
-        if ($request->getMethod() == 'GET') {
-            return $this->json(
-                $student->getDataStudent(),
-                Response::HTTP_ACCEPTED,
-                ['Content-Type' => 'application/json']
-            );
-        }
-
-        $body = $request->getContent();
-        $data = json_decode($body, true);
-
-        $student->setDni(@$data['dni'] ?: $student->getDni());
-        $student->setFullname(@$data['fullname'] ?: $student->getFullname());
-
-        $form = $this->createForm(StudentType::class, $student);
-        $form->submit($data, false);
-
-        if (!$form->isValid()) {
-            $error_forms = $this->formErrorsUtil->getErrorsFromForm($form);
-            return $this->json(
-                [
-                    'message' => 'Error de validación.',
-                    'validation' => $error_forms
-                ],
-                Response::HTTP_BAD_REQUEST,
-                ['Content-Type' => 'application/json']
-            );
-        }
-        $em->persist($student);
-        $em->flush();
-        return $this->json(
-            $student->getDataStudent(),
-            Response::HTTP_OK,
-            ['Content-Type' => 'application/json']
-        );
-    }
-
-    /**
      * @Route("/dni/{dni}", name="student_by_dni", methods={"GET"})
      */
     public function studentByDNI($dni, StudentsRepository $studentsRepository, Request $request, EntityManagerInterface $em): JsonResponse
@@ -207,6 +143,70 @@ class StudentsController extends AbstractController
         $em->flush();
         return $this->json(
             ['message'=>'Estudiante eliminado correctamente'],
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+    
+    /**
+     * @Route("/{student_id}", name="student_by_id", methods={"GET","PATCH"})
+     */
+    public function studentById($student_id, StudentsRepository $studentsRepository, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        if (!(int)$student_id) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Debe ingresar un id valido.',
+                ],
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $student = $studentsRepository->find($student_id);
+        if (!$student) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Usuario no encontrado.',
+                ],
+                Response::HTTP_NOT_FOUND,
+                ['Content-Type' => 'application/json']
+            );
+        }
+        if ($request->getMethod() == 'GET') {
+            return $this->json(
+                $student->getDataStudent(),
+                Response::HTTP_ACCEPTED,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $body = $request->getContent();
+        $data = json_decode($body, true);
+
+        $student->setDni(@$data['dni'] ?: $student->getDni());
+        $student->setFullname(@$data['fullname'] ?: $student->getFullname());
+
+        $form = $this->createForm(StudentType::class, $student);
+        $form->submit($data, false);
+
+        if (!$form->isValid()) {
+            $error_forms = $this->formErrorsUtil->getErrorsFromForm($form);
+            return $this->json(
+                [
+                    'message' => 'Error de validación.',
+                    'validation' => $error_forms
+                ],
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+        $em->persist($student);
+        $em->flush();
+        return $this->json(
+            $student->getDataStudent(),
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );
