@@ -140,7 +140,7 @@ class ComputersController extends AbstractController
         }
 
         return $this->json(
-            $computers[],
+            $computers,
             Response::HTTP_ACCEPTED,
             ['Content-Type' => 'application/json']
         );
