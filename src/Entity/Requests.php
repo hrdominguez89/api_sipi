@@ -218,6 +218,8 @@ class Requests
             'equipos_solicitados' => $this->getRequestedAmount(),
             'fecha_evento' => $this->getRequestedDate()->format('Y-m-d'),
             'profesor' => $this->getProfessor()->getFullname(),
+            'programas' => $this->getRequestedPrograms(),
+            'observaciones' => $this->getObservations()
         ];
     }
 }
