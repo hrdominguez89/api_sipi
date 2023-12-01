@@ -4,9 +4,13 @@ namespace App\Controller\Secure;
 
 use App\Constants\Constants;
 use App\Entity\Requests;
+use App\Entity\RequestsComputers;
+use App\Entity\StatusComputer;
 use App\Form\RequestType;
+use App\Repository\ComputersRepository;
 use App\Repository\RequestsRepository;
 use App\Repository\RolesRepository;
+use App\Repository\StatusComputerRepository;
 use App\Repository\StatusRequestRepository;
 use App\Repository\UserRepository;
 use App\Utils\FormErrorsUtil;
@@ -200,6 +204,56 @@ class RequestsController extends AbstractController
             return $this->json(
                 $requestCalendar,
                 Response::HTTP_OK,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        return $this->json(
+            ['message' => 'Su cuenta no tiene permisos para realizar esta operación'],
+            Response::HTTP_FORBIDDEN,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    /**
+     * @Route("/request/computer", name="calendar_request", methods={"POST"})
+     */
+    public function requestComputer(Request $request, RequestsRepository $requestsRepository, ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository,EntityManagerInterface $em): JsonResponse
+    {
+        if ($this->user->getRol()->getId() != Constants::ROLE_PROFESSOR) {
+
+            $body = $request->getContent();
+            $data = json_decode($body, true);
+
+            if (!(isset($data['computer_id']) && isset($data['request_id']))) {
+                return $this->json(
+                    [
+                        'message' => 'Error al enviar los datos, se espera un computer_id y un request_id',
+                    ],
+                    Response::HTTP_BAD_REQUEST,
+                    ['Content-Type' => 'application/json']
+                );
+            }
+
+
+            $status_computer_not_available = $statusComputerRepository->find(Constants::STATUS_COMPUTER_NOT_AVAILABLE);
+            $computer = $computersRepository->find($data['computer_id']);
+            $computer->setStatusComputer($status_computer_not_available);
+            $requestDb = $requestsRepository->find($data['request_id']);
+
+            $em->persist($computer);
+
+            $request_computer = new RequestsComputers;
+
+            $computer->$request_computer->setComputer($computer);
+            $request_computer->setRequest($requestDb);
+
+            $em->persist($request_computer);
+            $em->flush();
+
+            return $this->json(
+                ['message' => 'Se asigno la computadora al evento correctamente'],
+                Response::HTTP_CREATED,
                 ['Content-Type' => 'application/json']
             );
         }
