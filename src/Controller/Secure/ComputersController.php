@@ -197,7 +197,7 @@ class ComputersController extends AbstractController
     }
 
     /**
-     * @Route("/return", name="return_computer", methods={"POST"})
+     * @Route("/return", name="return_computer", methods={"PATCH"})
      */
     public function returnComputer(Request $request, StatusComputerRepository $statusComputerRepository,RequestsComputersRepository $requestsComputersRepository, EntityManagerInterface $em): JsonResponse
     {
