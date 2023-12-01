@@ -87,6 +87,51 @@ class ComputersController extends AbstractController
     }
 
     /**
+     * @Route("/available", name="computers_available", methods={"GET"})
+     */
+    public function computersAvailable(ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository): JsonResponse
+    {
+
+        $statu_available = $statusComputerRepository->find(Constants::STATUS_COMPUTER_AVAILABLE);
+
+        $computers = $computersRepository->getComputersByStatus($statu_available);
+
+        $computers_lists = [];
+        foreach ($computers as $computer) {
+            $computer_list[] = $computer->getDataComputers();
+        }
+
+        return $this->json(
+            $computer_list,
+            Response::HTTP_ACCEPTED,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    /**
+     * @Route("/notavailable", name="computers_not_available", methods={"GET"})
+     */
+    public function computersNotAvailable(
+        RequestsComputersRepository $requestsComputersRepository,
+        ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository): JsonResponse
+    {
+
+        $computersNotAvailable = $requestsComputersRepository->findNotAvailable();
+
+        $computers=[];
+
+        // foreach($computersNotAvailable as $computer){
+        //     $computers[]= $computer->->getComputer()->getDataComputers();
+        // }
+
+        // return $this->json(
+        //     $computers[],
+        //     Response::HTTP_ACCEPTED,
+        //     ['Content-Type' => 'application/json']
+        // );
+    }
+
+    /**
      * @Route("/{computer_id}", name="computers_by_id", methods={"GET","PATCH"})
      */
     public function computersById($computer_id, ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository, Request $request, EntityManagerInterface $em): JsonResponse
@@ -194,49 +239,5 @@ class ComputersController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/available", name="computers_available", methods={"GET"})
-     */
-    public function computersAvailable(ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository): JsonResponse
-    {
-
-        $statu_available = $statusComputerRepository->find(Constants::STATUS_COMPUTER_AVAILABLE);
-
-        $computers = $computersRepository->getComputersByStatus($statu_available);
-
-        $computers_lists = [];
-        foreach ($computers as $computer) {
-            $computer_list[] = $computer->getDataComputers();
-        }
-
-        return $this->json(
-            $computer_list,
-            Response::HTTP_ACCEPTED,
-            ['Content-Type' => 'application/json']
-        );
-    }
-
-    /**
-     * @Route("/notavailable", name="computers_not_available", methods={"GET"})
-     */
-    public function computersNotAvailable(
-        RequestsComputersRepository $requestsComputersRepository,
-        ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository): JsonResponse
-    {
-
-        $statu_available = $statusComputerRepository->find(Constants::STATUS_COMPUTER_NOT_AVAILABLE);
-
-        $computers = $computersRepository->getComputersByStatus($statu_available);
-
-        $computers_lists = [];
-        foreach ($computers as $computer) {
-            $computer_list[] = $computer->getDataComputers();
-        }
-
-        return $this->json(
-            $computer_list,
-            Response::HTTP_ACCEPTED,
-            ['Content-Type' => 'application/json']
-        );
-    }
+    
 }

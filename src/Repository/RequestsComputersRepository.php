@@ -39,20 +39,18 @@ class RequestsComputersRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return RequestsComputers[] Returns an array of RequestsComputers objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('r.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+    * @return RequestsComputers[] Returns an array of RequestsComputers objects
+    */
+   public function findNotAvailable(): array
+   {
+       return $this->createQueryBuilder('r')
+           ->where('r.returnetAt is null')
+           ->orderBy('r.id', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
 //    public function findOneBySomeField($value): ?RequestsComputers
 //    {
