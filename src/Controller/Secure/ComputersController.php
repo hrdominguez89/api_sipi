@@ -4,9 +4,11 @@ namespace App\Controller\Secure;
 
 use App\Constants\Constants;
 use App\Entity\Computers;
+use App\Entity\RequestsComputers;
 use App\Entity\StatusComputer;
 use App\Form\ComputersType;
 use App\Repository\ComputersRepository;
+use App\Repository\RequestsComputersRepository;
 use App\Repository\StatusComputerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -202,9 +204,33 @@ class ComputersController extends AbstractController
 
         $computers = $computersRepository->getComputersByStatus($statu_available);
 
-        $computers_lists=[];
-        foreach($computers as $computer){
-            $computer_list[]=$computer->getDataComputers();
+        $computers_lists = [];
+        foreach ($computers as $computer) {
+            $computer_list[] = $computer->getDataComputers();
+        }
+
+        return $this->json(
+            $computer_list,
+            Response::HTTP_ACCEPTED,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    /**
+     * @Route("/notavailable", name="computers_by_id", methods={"GET"})
+     */
+    public function computersNotAvailable(
+        RequestsComputersRepository $requestsComputersRepository,
+        ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository): JsonResponse
+    {
+
+        $statu_available = $statusComputerRepository->find(Constants::STATUS_COMPUTER_NOT_AVAILABLE);
+
+        $computers = $computersRepository->getComputersByStatus($statu_available);
+
+        $computers_lists = [];
+        foreach ($computers as $computer) {
+            $computer_list[] = $computer->getDataComputers();
         }
 
         return $this->json(
