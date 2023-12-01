@@ -216,7 +216,7 @@ class RequestsController extends AbstractController
     }
 
     /**
-     * @Route("/request/computer", name="calendar_request", methods={"POST"})
+     * @Route("/computer", name="calendar_request", methods={"POST"})
      */
     public function requestComputer(Request $request, RequestsRepository $requestsRepository, ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository,EntityManagerInterface $em): JsonResponse
     {
