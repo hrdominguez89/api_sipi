@@ -112,11 +112,11 @@ class ComputersController extends AbstractController
 
         $computers_lists = [];
         foreach ($computers as $computer) {
-            $computer_list[] = $computer->getDataComputers();
+            $computers_lists[] = $computer->getDataComputers();
         }
 
         return $this->json(
-            $computer_list,
+            $computers_lists,
             Response::HTTP_ACCEPTED,
             ['Content-Type' => 'application/json']
         );
