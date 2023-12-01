@@ -40,26 +40,40 @@ class ComputersRepository extends ServiceEntityRepository
         }
     }
 
-   /**
-    * @return Computers[] Returns an array of Computers objects
-    */
-   public function getAllComputers(): array
-   {
-       return $this->createQueryBuilder('c')
-           ->where('c.visible = true')
-           ->orderBy('c.id', 'ASC')
-           ->getQuery()
-           ->getResult()
-       ;
-   }
+    /**
+     * @return Computers[] Returns an array of Computers objects
+     */
+    public function getAllComputers(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.visible = true')
+            ->orderBy('c.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Computers
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+
+    /**
+     * @return Computers[] Returns an array of Computers objects
+     */
+    public function getComputersByStatus($status): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.visible = true')
+            ->andWhere('c.statusComputer = :statusComputer')
+            ->setParameter('statusComputer', $status)
+            ->orderBy('c.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    //    public function findOneBySomeField($value): ?Computers
+    //    {
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

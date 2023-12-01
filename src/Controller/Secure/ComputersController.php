@@ -4,6 +4,7 @@ namespace App\Controller\Secure;
 
 use App\Constants\Constants;
 use App\Entity\Computers;
+use App\Entity\StatusComputer;
 use App\Form\ComputersType;
 use App\Repository\ComputersRepository;
 use App\Repository\StatusComputerRepository;
@@ -187,6 +188,28 @@ class ComputersController extends AbstractController
         return $this->json(
             ['message' => 'Computadora eliminada correctamente'],
             Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    /**
+     * @Route("/available", name="computers_by_id", methods={"GET"})
+     */
+    public function computersAvailable(ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository): JsonResponse
+    {
+
+        $statu_available = $statusComputerRepository->find(Constants::STATUS_COMPUTER_AVAILABLE);
+
+        $computers = $computersRepository->getComputersByStatus($statu_available);
+
+        $computers_lists=[];
+        foreach($computers as $computer){
+            $computer_list[]=$computer->getDataComputers();
+        }
+
+        return $this->json(
+            $computer_list,
+            Response::HTTP_ACCEPTED,
             ['Content-Type' => 'application/json']
         );
     }
