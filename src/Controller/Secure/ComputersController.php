@@ -176,7 +176,7 @@ class ComputersController extends AbstractController
 
             $request_computer = new RequestsComputers;
 
-            $computer->$request_computer->setComputer($computer);
+            $request_computer->setComputer($computer);
             $request_computer->setRequest($requestDb);
 
             $em->persist($request_computer);
