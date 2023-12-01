@@ -229,8 +229,22 @@ class Computers
         return $this;
     }
 
-    public function getDataComputers(): array
+    public function getDataComputers($data): array
     {
+        if ($data) {
+            return [
+                'id' => $this->getId(),
+                'name' => $this->getName(),
+                'brand' => $this->getBrand(),
+                'model' => $this->getModel(),
+                'serie' => $this->getSerie(),
+                'details' => $this->getDetails(),
+                'status_computer_id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
+                'status_computer_name' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
+                'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+                'request_computer_id' => $data
+            ];
+        }
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
