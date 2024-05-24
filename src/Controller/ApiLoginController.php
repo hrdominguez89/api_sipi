@@ -12,14 +12,10 @@ use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @Route("/api")
- */
+#[Route("/api")]
 class ApiLoginController extends AbstractController
 {
-    /**
-     * @Route("/login", name="login_check")
-     */
+    #[Route("/login", name: "login_check", methods: ["POST"])]
     public function index(Request $request, UserRepository $userRepository, PasswordHasherFactoryInterface $passwordHasherFactoryInterface, JWTTokenManagerInterface $jwtManager): JsonResponse
     {
         $body = $request->getContent();
