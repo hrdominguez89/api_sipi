@@ -8,39 +8,25 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-/**
- * @ORM\Entity(repositoryClass=StudentsRepository::class)
- * 
- * @UniqueEntity(fields="dni", message="El DNI indicado, ya se encuentra registrado.")
- */
+#[ORM\Entity(repositoryClass: StudentsRepository::class)]
+#[UniqueEntity(fields: "dni", message: "El DNI indicado, ya se encuentra registrado.")]
 class Students
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * 
-     * @ORM\Column(type="integer", unique=true)
-     */
+    #[ORM\Column(type: "integer", unique: true)]
     private $dni;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
+    #[ORM\Column(type: "string", length: 50)]
     private $fullname;
 
-    /**
-     * @ORM\OneToMany(targetEntity=RequestsComputers::class, mappedBy="student")
-     */
+    #[ORM\OneToMany(targetEntity: RequestsComputers::class, mappedBy: "student")]
     private $requestsComputers;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true, options={"default":TRUE})
-     */
+    #[ORM\Column(type: "boolean", nullable: true, options: ["default" => TRUE])]
     private $visible;
 
     public function __construct()
@@ -77,7 +63,6 @@ class Students
 
         return $this;
     }
-
     /**
      * @return Collection<int, RequestsComputers>
      */

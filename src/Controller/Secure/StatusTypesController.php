@@ -9,14 +9,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/api/statusTypes")
- */
+#[Route("/api/statusTypes")]
 class StatusTypesController extends AbstractController
 {
-    /**
-     * @Route("/computers", name="status_types_computers", methods={"GET"})
-     */
+    #[Route("/computers", name: "status_types_computers", methods: ["GET"])]
     public function computers(StatusComputerRepository $statusComputerRepository): JsonResponse
     {
         $statusComputers = $statusComputerRepository->findAll();
@@ -31,9 +27,7 @@ class StatusTypesController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/requests", name="status_types_requests", methods={"GET"})
-     */
+    #[Route("/requests", name: "status_types_requests", methods: ["GET"])]
     public function requests(StatusRequestRepository $statusRequestRepository): JsonResponse
     {
         $statusRequests = $statusRequestRepository->findAll();

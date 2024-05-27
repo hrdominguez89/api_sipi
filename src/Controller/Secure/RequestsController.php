@@ -16,7 +16,6 @@ use App\Repository\UserRepository;
 use App\Utils\FormErrorsUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-use Namshi\JOSE\Signer\SecLib\RSA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,9 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-/**
- * @Route("/api/requests")
- */
+#[Route("/api/requests")]
 class RequestsController extends AbstractController
 {
 
@@ -47,9 +44,7 @@ class RequestsController extends AbstractController
         $this->user = $userRepository->findOneBy(['email' => $username]);
     }
 
-    /**
-     * @Route("", name="request", methods={"GET","POST"})
-     */
+    #[Route("", name: "request", methods: ["GET", "POST"])]
     public function index(StatusRequestRepository $statusRequestRepository, RequestsRepository $requestsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
 
@@ -125,9 +120,7 @@ class RequestsController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/review/{request_id}", name="request_review", methods={"PATCH"})
-     */
+    #[Route("/review/{request_id}", name: "request_review", methods: ["PATCH"])]
     public function review($request_id, StatusRequestRepository $statusRequestRepository, RequestsRepository $requestsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if (!(int)$request_id) {
@@ -186,9 +179,7 @@ class RequestsController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/calendar", name="calendar_request", methods={"GET"})
-     */
+    #[Route("/calendar", name: "calendar_request", methods: ["GET"])]
     public function calendar(RequestsRepository $requestsRepository): JsonResponse
     {
 
@@ -214,5 +205,4 @@ class RequestsController extends AbstractController
             ['Content-Type' => 'application/json']
         );
     }
-
 }

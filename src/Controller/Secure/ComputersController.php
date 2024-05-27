@@ -23,9 +23,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * @Route("/api/computers")
- */
+ #[Route("/api/computers")]
 class ComputersController extends AbstractController
 {
     private $formErrorsUtil;
@@ -44,9 +42,7 @@ class ComputersController extends AbstractController
         $this->user = $userRepository->findOneBy(['email' => $username]);
     }
 
-    /**
-     * @Route("", name="computers", methods={"GET","POST"})
-     */
+    #[Route("", name: "computers", methods: ["GET", "POST"])]
     public function computers(StatusComputerRepository $statusComputerRepository, ComputersRepository $computersRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if ($request->getMethod() == 'GET') {
@@ -100,9 +96,7 @@ class ComputersController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/available", name="computers_available", methods={"GET"})
-     */
+    #[Route("/available", name: "computers_available", methods: ["GET"])]
     public function computersAvailable(ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository): JsonResponse
     {
 
@@ -122,9 +116,7 @@ class ComputersController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/notavailable", name="computers_not_available", methods={"GET"})
-     */
+    #[Route("/notavailable", name: "computers_not_available", methods: ["GET"])]
     public function computersNotAvailable(
         RequestsComputersRepository $requestsComputersRepository,
         ComputersRepository $computersRepository,
@@ -146,9 +138,7 @@ class ComputersController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/requests", name="request_computer", methods={"POST"})
-     */
+    #[Route("/requests", name: "request_computer", methods: ["POST"])]
     public function requestComputer(Request $request, RequestsRepository $requestsRepository, ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository, EntityManagerInterface $em): JsonResponse
     {
         if ($this->user->getRol()->getId() != Constants::ROLE_PROFESSOR) {
@@ -196,10 +186,8 @@ class ComputersController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/return", name="return_computer", methods={"PATCH"})
-     */
-    public function returnComputer(Request $request, StatusComputerRepository $statusComputerRepository,RequestsComputersRepository $requestsComputersRepository, EntityManagerInterface $em): JsonResponse
+    #[Route("/return", name: "return_computer", methods: ["PATCH"])]
+    public function returnComputer(Request $request, StatusComputerRepository $statusComputerRepository, RequestsComputersRepository $requestsComputersRepository, EntityManagerInterface $em): JsonResponse
     {
         if ($this->user->getRol()->getId() != Constants::ROLE_PROFESSOR) {
 
@@ -215,10 +203,10 @@ class ComputersController extends AbstractController
                     ['Content-Type' => 'application/json']
                 );
             }
-            
+
             $request_computer_id = $requestsComputersRepository->find($data['id']);
 
-            if(!$request_computer_id){
+            if (!$request_computer_id) {
                 return $this->json(
                     [
                         'message' => 'No se encontro la computadora con el id indicado.',
@@ -252,9 +240,7 @@ class ComputersController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{computer_id}", name="computers_by_id", methods={"GET","PATCH"})
-     */
+    #[Route("/{computer_id}", name: "computers_by_id", methods: ["GET", "PATCH"])]
     public function computersById($computer_id, ComputersRepository $computersRepository, StatusComputerRepository $statusComputerRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if (!(int)$computer_id) {
@@ -322,9 +308,7 @@ class ComputersController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/delete/{computer_id}", name="delete_computer_by_id", methods={"DELETE"})
-     */
+    #[Route("/delete/{computer_id}", name: "delete_computer_by_id", methods: ["DELETE"])]
     public function deleteComputerById($computer_id, ComputersRepository $computersRepository, EntityManagerInterface $em): JsonResponse
     {
         if (!(int)$computer_id) {

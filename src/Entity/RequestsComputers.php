@@ -5,44 +5,30 @@ namespace App\Entity;
 use App\Repository\RequestsComputersRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=RequestsComputersRepository::class)
- */
+#[ORM\Entity(repositoryClass: RequestsComputersRepository::class)]
 class RequestsComputers
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Requests::class, inversedBy="requestsComputers")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Requests::class, inversedBy: "requestsComputers")]
+    #[ORM\JoinColumn(nullable: false)]
     private $request;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Computers::class, inversedBy="requestsComputers")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Computers::class, inversedBy: "requestsComputers")]
+    #[ORM\JoinColumn(nullable: false)]
     private $computer;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Students::class, inversedBy="requestsComputers")
-     * @ORM\JoinColumn(nullable=true)
-     */
+    #[ORM\ManyToOne(targetEntity: Students::class, inversedBy: "requestsComputers")]
+    #[ORM\JoinColumn(nullable: true)]
     private $student;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: "datetime", nullable: true)]
     private $returnetAt;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private $observations;
 
     public function getId(): ?int

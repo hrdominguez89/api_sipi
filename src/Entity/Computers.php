@@ -9,67 +9,43 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ComputersRepository::class)
- */
+#[ORM\Entity(repositoryClass: ComputersRepository::class)]
 class Computers
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
+    #[ORM\Column(type: "string", length: 20)]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
+    #[ORM\Column(type: "string", length: 20)]
     private $brand;
 
-    /**
-     * @ORM\Column(type="string", length=30)
-     */
+    #[ORM\Column(type: "string", length: 30)]
     private $model;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
+    #[ORM\Column(type: "string", length: 50)]
     private $serie;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private $details;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=StatusComputer::class, inversedBy="computers")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: StatusComputer::class, inversedBy: "computers")]
+    #[ORM\JoinColumn(nullable: false)]
     private $statusComputer;
 
-    /**
-     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
-     */
+    #[ORM\Column(type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
     private $createdAt;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ProgramsComputers::class, mappedBy="computer")
-     */
+    #[ORM\OneToMany(targetEntity: ProgramsComputers::class, mappedBy: "computer")]
     private $programsComputers;
 
-    /**
-     * @ORM\OneToMany(targetEntity=RequestsComputers::class, mappedBy="computer")
-     */
+    #[ORM\OneToMany(targetEntity: RequestsComputers::class, mappedBy: "computer")]
     private $requestsComputers;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true,options={"default":TRUE})
-     */
+    #[ORM\Column(type: "boolean", nullable: true, options: ["default" => TRUE])]
     private $visible;
 
     public function __construct()

@@ -8,14 +8,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/api/roles")
- */
+#[Route("/api/roles")]
 class RolesController extends AbstractController
 {
-    /**
-     * @Route("", name="roles", methods={"GET"})
-     */
+    #[Route("", name: "roles", methods: ["GET"])]
     public function index(RolesRepository $rolesRepository): JsonResponse
     {
         $roles = $rolesRepository->findAll();

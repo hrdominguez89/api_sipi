@@ -11,59 +11,40 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * 
- * @UniqueEntity(fields="email", message="El E-Mail indicado, ya se encuentra registrado.")
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: "email", message: "El E-Mail indicado, ya se encuentra registrado.")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
+    #[ORM\Column(type: "string", length: 180, unique: true)]
     private $email;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: "json")]
     private $roles = [];
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: "string")]
     private $password;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Roles::class, inversedBy="user")
-     */
+    #[ORM\ManyToOne(targetEntity: Roles::class, inversedBy: "user")]
     private $rol;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Requests::class, mappedBy="professor")
-     */
+    #[ORM\OneToMany(targetEntity: Requests::class, mappedBy: "professor")]
     private $requests;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
+    #[ORM\Column(type: "string", length: 50)]
     private $fullname;
 
-    /**
-     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
-     */
+    #[ORM\Column(type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
     private $createdAt;
 
-    /**
-     * @ORM\Column(type="boolean", options={"default":TRUE})
-     */
+    #[ORM\Column(type: "boolean", options: ["default" => TRUE])]
     private $active;
 
     public function __construct()
@@ -90,7 +71,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
     /**
      * A visual identifier that represents this user.
      *
@@ -100,7 +80,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string) $this->email;
     }
-
     /**
      * @deprecated since Symfony 5.3, use getUserIdentifier instead
      */
@@ -108,7 +87,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string) $this->email;
     }
-
     /**
      * @return array
      */
@@ -135,7 +113,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
     /**
      * @see PasswordAuthenticatedUserInterface
      */
@@ -150,7 +127,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
     /**
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
@@ -161,7 +137,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return null;
     }
-
     /**
      * @see UserInterface
      */
@@ -170,7 +145,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
     /**
      * @return Collection<int, Requests>
      */

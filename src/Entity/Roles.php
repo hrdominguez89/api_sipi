@@ -7,26 +7,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=RolesRepository::class)
- */
+#[ORM\Entity(repositoryClass:RolesRepository::class)]
 class Roles
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column(type:"integer")]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
+    #[ORM\Column(type:"string", length:20)]
     private $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="rol")
-     */
+    #[ORM\OneToMany(targetEntity:User::class, mappedBy:"rol")]
     private $user;
 
     public function __construct()

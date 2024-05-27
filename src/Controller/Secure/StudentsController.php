@@ -13,9 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Utils\FormErrorsUtil;
 
-/**
- * @Route("/api/students")
- */
+#[Route("/api/students")]
 class StudentsController extends AbstractController
 {
 
@@ -27,9 +25,7 @@ class StudentsController extends AbstractController
     }
 
 
-    /**
-     * @Route("", name="students", methods={"GET","POST"})
-     */
+    #[Route("", name: "students", methods: ["GET", "POST"])]
     public function index(StudentsRepository $studentsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if ($request->getMethod() == 'GET') {
@@ -76,9 +72,7 @@ class StudentsController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/dni/{dni}", name="student_by_dni", methods={"GET"})
-     */
+    #[Route("/dni/{dni}", name: "student_by_dni", methods: ["GET"])]
     public function studentByDNI($dni, StudentsRepository $studentsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if (!(int)$dni) {
@@ -110,9 +104,7 @@ class StudentsController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/delete/{student_id}", name="delete_student_by_id", methods={"DELETE"})
-     */
+    #[Route("/delete/{student_id}", name: "delete_student_by_id", methods: ["DELETE"])]
     public function deleteComputerById($student_id, StudentsRepository $studensRepository, EntityManagerInterface $em): JsonResponse
     {
         if (!(int)$student_id) {
@@ -142,15 +134,13 @@ class StudentsController extends AbstractController
         $em->persist($studen);
         $em->flush();
         return $this->json(
-            ['message'=>'Estudiante eliminado correctamente'],
+            ['message' => 'Estudiante eliminado correctamente'],
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );
     }
-    
-    /**
-     * @Route("/{student_id}", name="student_by_id", methods={"GET","PATCH"})
-     */
+
+    #[Route("/{student_id}", name: "student_by_id", methods: ["GET", "PATCH"])]
     public function studentById($student_id, StudentsRepository $studentsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if (!(int)$student_id) {

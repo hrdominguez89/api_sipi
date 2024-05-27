@@ -13,9 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Utils\FormErrorsUtil;
 use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * @Route("/api/programs")
- */
+#[Route("/api/programs")]
 class ProgramsController extends AbstractController
 {
     private $formErrorsUtil;
@@ -26,9 +24,7 @@ class ProgramsController extends AbstractController
     }
 
 
-    /**
-     * @Route("", name="programs", methods={"GET","POST"})
-     */
+    #[Route("", name: "programs", methods: ["GET", "POST"])]
     public function programs(ProgramsRepository $programsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if ($request->getMethod() == 'GET') {
@@ -76,9 +72,7 @@ class ProgramsController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{program_id}", name="programs_by_id", methods={"GET","PATCH"})
-     */
+    #[Route("/{program_id}", name: "programs_by_id", methods: ["GET", "PATCH"])]
     public function programsById($program_id, ProgramsRepository $programsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if (!(int)$program_id) {
@@ -141,9 +135,7 @@ class ProgramsController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/delete/{program_id}", name="delete_program_by_id", methods={"DELETE"})
-     */
+    #[Route("/delete/{program_id}", name: "delete_program_by_id", methods: ["DELETE"])]
     public function deleteComputerById($program_id, ProgramsRepository $programsRepository, EntityManagerInterface $em): JsonResponse
     {
         if (!(int)$program_id) {

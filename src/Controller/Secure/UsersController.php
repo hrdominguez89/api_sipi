@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Utils\FormErrorsUtil;
 
-/**
- * @Route("/api/users")
- */
+#[Route("/api/users")]
 class UsersController extends AbstractController
 {
 
@@ -28,9 +26,7 @@ class UsersController extends AbstractController
     }
 
 
-    /**
-     * @Route("", name="users", methods={"GET","POST"})
-     */
+    #[Route("", name: "users", methods: ["GET", "POST"])]
     public function index(UserRepository $userRepository, RolesRepository $rolesRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if ($request->getMethod() == 'GET') {
@@ -84,9 +80,7 @@ class UsersController extends AbstractController
     }
 
 
-    /**
-     * @Route("/delete/{user_id}", name="delete_user_by_id", methods={"DELETE"})
-     */
+    #[Route("/delete/{user_id}", name: "delete_user_by_id", methods: ["DELETE"])]
     public function deleteUserById($user_id, UserRepository $userRepository, EntityManagerInterface $em): JsonResponse
     {
         if (!(int)$user_id) {
@@ -122,10 +116,8 @@ class UsersController extends AbstractController
         );
     }
 
-    
-    /**
-     * @Route("/{user_id}", name="user_by_id", methods={"GET","PATCH"})
-     */
+
+    #[Route("/{user_id}", name: "user_by_id", methods: ["GET", "PATCH"])]
     public function userById($user_id, userRepository $userRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if (!(int)$user_id) {

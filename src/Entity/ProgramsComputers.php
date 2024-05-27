@@ -5,28 +5,26 @@ namespace App\Entity;
 use App\Repository\ProgramsComputersRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ProgramsComputersRepository::class)
- */
+#[ORM\Entity(repositoryClass: ProgramsComputersRepository::class)]
 class ProgramsComputers
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Programs::class, inversedBy="programsComputers")
-     * @ORM\JoinColumn(nullable=false)
-     */
+
+    #[ORM\ManyToOne(targetEntity: Programs::class, inversedBy: "programsComputers")]
+    #[ORM\JoinColumn(nullable: false)]
+
     private $program;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Computers::class, inversedBy="programsComputers")
-     * @ORM\JoinColumn(nullable=false)
-     */
+
+    #[ORM\ManyToOne(targetEntity: Computers::class, inversedBy: "programsComputers")]
+    #[ORM\JoinColumn(nullable: false)]
+
     private $computer;
 
     public function getId(): ?int

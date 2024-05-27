@@ -7,57 +7,53 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=RequestsRepository::class)
- */
+#[ORM\Entity(repositoryClass: RequestsRepository::class)]
 class Requests
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+
     private $id;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+
+    #[ORM\Column(type: "text", nullable: true)]
+
     private $requestedPrograms;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+
+    #[ORM\Column(type: "integer")]
+
     private $requestedAmount;
 
-    /**
-     * @ORM\Column(type="date")
-     */
+
+    #[ORM\Column(type: "date")]
+
     private $requestedDate;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+
+    #[ORM\Column(type: "text", nullable: true)]
+
     private $observations;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=StatusRequest::class, inversedBy="requests")
-     * @ORM\JoinColumn(nullable=false)
-     */
+
+    #[ORM\ManyToOne(targetEntity: StatusRequest::class, inversedBy: "requests")]
+    #[ORM\JoinColumn(nullable: false)]
+
     private $statusRequest;
 
-    /**
-     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
-     */
+
+    #[ORM\Column(type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
     private $createdAt;
 
-    /**
-     * @ORM\OneToMany(targetEntity=RequestsComputers::class, mappedBy="request")
-     */
+
+    #[ORM\OneToMany(targetEntity: RequestsComputers::class, mappedBy: "request")]
     private $requestsComputers;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="requests")
-     */
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "requests")]
+
     private $professor;
 
     public function __construct()
@@ -146,6 +142,7 @@ class Requests
     /**
      * @return Collection<int, RequestsComputers>
      */
+
     public function getRequestsComputers(): Collection
     {
         return $this->requestsComputers;

@@ -7,46 +7,30 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ProgramsRepository::class)
- */
+#[ORM\Entity(repositoryClass: ProgramsRepository::class)]
 class Programs
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
+    #[ORM\Column(type: "string", length: 50)]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
+    #[ORM\Column(type: "string", length: 20)]
     private $version;
 
-    /**
-     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
-     */
+    #[ORM\Column(type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
     private $createdAt;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private $observations;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ProgramsComputers::class, mappedBy="program")
-     */
+    #[ORM\OneToMany(targetEntity: ProgramsComputers::class, mappedBy: "program")]
     private $programsComputers;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true, options={"default":TRUE})
-     */
+    #[ORM\Column(type: "boolean", nullable: true, options: ["default" => TRUE])]
     private $visible;
 
     public function __construct()
@@ -108,7 +92,6 @@ class Programs
 
         return $this;
     }
-
     /**
      * @return Collection<int, ProgramsComputers>
      */
