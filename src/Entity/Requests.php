@@ -56,10 +56,14 @@ class Requests
 
     private $professor;
 
+    #[ORM\Column(options: ["default" => TRUE])]
+    private ?bool $visible = null;
+
     public function __construct()
     {
         $this->requestsComputers = new ArrayCollection();
         $this->createdAt = new \DateTime();
+        $this->visible = true;
     }
 
     public function getId(): ?int
@@ -218,5 +222,17 @@ class Requests
             'programas' => $this->getRequestedPrograms(),
             'observaciones' => $this->getObservations()
         ];
+    }
+
+    public function isVisible(): ?bool
+    {
+        return $this->visible;
+    }
+
+    public function setVisible(bool $visible): static
+    {
+        $this->visible = $visible;
+
+        return $this;
     }
 }

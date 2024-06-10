@@ -4,13 +4,8 @@ namespace App\Controller\Secure;
 
 use App\Constants\Constants;
 use App\Entity\Requests;
-use App\Entity\RequestsComputers;
-use App\Entity\StatusComputer;
 use App\Form\RequestType;
-use App\Repository\ComputersRepository;
 use App\Repository\RequestsRepository;
-use App\Repository\RolesRepository;
-use App\Repository\StatusComputerRepository;
 use App\Repository\StatusRequestRepository;
 use App\Repository\UserRepository;
 use App\Utils\FormErrorsUtil;
@@ -116,6 +111,106 @@ class RequestsController extends AbstractController
         return $this->json(
             ['message' => 'Su cuenta no tiene permisos para realizar esta operación'],
             Response::HTTP_FORBIDDEN,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    #[Route("/edit/{request_id}", name: "request_edit", methods: ["PATCH"])]
+    public function edit($request_id, StatusRequestRepository $statusRequestRepository, RequestsRepository $requestsRepository, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        if (!(int)$request_id) {
+            return $this->json(
+                [
+                    'message' => 'El id ingresado no es valido',
+                ],
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $requestBd = $requestsRepository->find($request_id);
+        if (!$requestBd) {
+            return $this->json(
+                [
+                    'message' => 'El id ingresado no se encuentra',
+                ],
+                Response::HTTP_NOT_FOUND,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        if ($this->user->getRol()->getId() != Constants::ROLE_PROFESSOR) {
+
+            $body = $request->getContent();
+            $data = json_decode($body, true);
+
+            $requestBd->setRequestedDate(@$data['requestedDate']);
+            $requestBd->setRequestedAmount(@$data['requestedAmount']);
+            $requestBd->setRequestedPrograms(@$data['requestedPrograms']);
+            $requestBd->setObservations(@$data['observations']);
+            $form = $this->createForm(RequestType::class, $requestBd);
+            $form->submit($data, false);
+
+            if (!$form->isValid()) {
+                $error_forms = $this->formErrorsUtil->getErrorsFromForm($form);
+                return $this->json(
+                    [
+                        'message' => 'Error de validación.',
+                        'validation' => $error_forms
+                    ],
+                    Response::HTTP_BAD_REQUEST,
+                    ['Content-Type' => 'application/json']
+                );
+            }
+            $em->persist($requestBd);
+            $em->flush();
+
+            return $this->json(
+                ['message' => 'Solicitud editada con éxito'],
+                Response::HTTP_CREATED,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        return $this->json(
+            ['message' => 'Su cuenta no tiene permisos para realizar esta operación'],
+            Response::HTTP_FORBIDDEN,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    #[Route("/delete/{request_id}", name: "delete_request_by_id", methods: ["DELETE"])]
+    public function deleteRequest($request_id, RequestsRepository $requestsRepository, EntityManagerInterface $em): JsonResponse
+    {
+        if (!(int)$request_id) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Debe ingresar un id valido.',
+                ],
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $requestBd = $requestsRepository->find($request_id);
+        if (!$requestBd) {
+            return $this->json(
+                [
+                    "status" => false,
+                    'message' => 'Solicitud no encontrada.',
+                ],
+                Response::HTTP_NOT_FOUND,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $requestBd->setVisible(false);
+        $em->persist($requestBd);
+        $em->flush();
+        return $this->json(
+            ['message' => 'Computadora eliminada correctamente'],
+            Response::HTTP_OK,
             ['Content-Type' => 'application/json']
         );
     }
