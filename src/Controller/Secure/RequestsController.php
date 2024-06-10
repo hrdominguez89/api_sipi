@@ -129,7 +129,7 @@ class RequestsController extends AbstractController
             );
         }
 
-        $requestBd = $requestsRepository->find($request_id);
+        $requestBd = $requestsRepository->findOneBy(['id' => $request_id, 'visible' => true]);
         if (!$requestBd) {
             return $this->json(
                 [
