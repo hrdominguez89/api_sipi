@@ -9,6 +9,7 @@ use App\Repository\RequestsRepository;
 use App\Repository\StatusRequestRepository;
 use App\Repository\UserRepository;
 use App\Utils\FormErrorsUtil;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -153,7 +154,7 @@ class RequestsController extends AbstractController
             $body = $request->getContent();
             $data = json_decode($body, true);
 
-            $requestBd->setRequestedDate(@$data['requestedDate']);
+            $requestBd->setRequestedDate(@DateTime::createFromFormat('Y-m-d', @$data['requestedDate']));
             $requestBd->setRequestedAmount(@$data['requestedAmount']);
             $requestBd->setRequestedPrograms(@$data['requestedPrograms']);
             $requestBd->setObservations(@$data['observations']);
