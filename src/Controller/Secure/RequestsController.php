@@ -115,8 +115,8 @@ class RequestsController extends AbstractController
         );
     }
 
-    #[Route("/edit/{request_id}", name: "request_edit", methods: ["PATCH"])]
-    public function edit($request_id, StatusRequestRepository $statusRequestRepository, RequestsRepository $requestsRepository, Request $request, EntityManagerInterface $em): JsonResponse
+    #[Route("/edit/{request_id}", name: "request_edit", methods: ["GET", "PATCH"])]
+    public function edit($request_id, RequestsRepository $requestsRepository, Request $request, EntityManagerInterface $em): JsonResponse
     {
         if (!(int)$request_id) {
             return $this->json(
@@ -140,6 +140,15 @@ class RequestsController extends AbstractController
         }
 
         if ($this->user->getRol()->getId() != Constants::ROLE_PROFESSOR) {
+
+            if ($request->getMethod() == 'GET') {
+
+                return $this->json(
+                    $requestBd->getRequestData(),
+                    Response::HTTP_OK,
+                    ['Content-Type' => 'application/json']
+                );
+            }
 
             $body = $request->getContent();
             $data = json_decode($body, true);
@@ -167,7 +176,7 @@ class RequestsController extends AbstractController
 
             return $this->json(
                 ['message' => 'Solicitud editada con éxito'],
-                Response::HTTP_CREATED,
+                Response::HTTP_ACCEPTED,
                 ['Content-Type' => 'application/json']
             );
         }
