@@ -139,7 +139,7 @@ class RequestsController extends AbstractController
             );
         }
 
-        if ($this->user->getRol()->getId() != Constants::ROLE_PROFESSOR) {
+        if ($this->user->getRol()->getId() == Constants::ROLE_PROFESSOR) {
 
             if ($request->getMethod() == 'GET') {
 
