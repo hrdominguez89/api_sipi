@@ -48,7 +48,7 @@ class RequestsRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->where('r.professor = :val')
-            ->where('r.visible',true)
+            ->where('r.visible = true')
             ->setParameter('val', $profesor_id)
             ->orderBy('r.id', 'DESC')
             ->getQuery()
