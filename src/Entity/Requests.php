@@ -248,7 +248,7 @@ class Requests
         return $this->requestedSubject;
     }
 
-    public function setSubject(?string $requestedSubject): static
+    public function setRequestedSubject(?string $requestedSubject): static
     {
         $this->requestedSubject = $requestedSubject;
 
