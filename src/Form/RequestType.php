@@ -37,13 +37,20 @@ class RequestType extends AbstractType
                     new NotBlank(),
                 ]
             ])
-            ->add('requestedPrograms', TextType::class, [
-                'required' => false,
+            ->add('requestedSubject', TextType::class, [
+                'required' => true,
                 'constraints' => [
                     new NotNull(),
                     new NotBlank()
                 ]
             ])
+            // ->add('requestedPrograms', TextType::class, [
+            //     'required' => false,
+            //     'constraints' => [
+            //         new NotNull(),
+            //         new NotBlank()
+            //     ]
+            // ])
             ->add('observations', TextType::class, [
                 'required' => false
             ]);

@@ -59,6 +59,9 @@ class Requests
     #[ORM\Column(options: ["default" => TRUE])]
     private ?bool $visible = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $requestedSubject = null;
+
     public function __construct()
     {
         $this->requestsComputers = new ArrayCollection();
@@ -190,8 +193,9 @@ class Requests
     {
         return [
             'id' => $this->getId(),
-            'programas_solicitados' => $this->getRequestedPrograms(),
+            'programas_solicitados' => explode(',', $this->getRequestedPrograms()),
             'equipos_solicitados' => $this->getRequestedAmount(),
+            'materia' => $this->getRequestedSubject(),
             'solicitado_el' => $this->getCreatedAt()->format('Y-m-d'),
             'solicitado_para_el' => $this->getRequestedDate()->format('Y-m-d'),
             'estado' => $this->getStatusRequest()->getName(),
@@ -203,7 +207,8 @@ class Requests
     {
         return [
             'id' => $this->getId(),
-            'programas_solicitados' => $this->getRequestedPrograms(),
+            'programas_solicitados' => explode(',', $this->getRequestedPrograms()),
+            'materia' => $this->getRequestedSubject(),
             'equipos_solicitados' => $this->getRequestedAmount(),
             'solicitado_el' => $this->getCreatedAt()->format('Y-m-d'),
             'solicitado_para_el' => $this->getRequestedDate()->format('Y-m-d'),
@@ -220,6 +225,7 @@ class Requests
             'equipos_solicitados' => $this->getRequestedAmount(),
             'fecha_evento' => $this->getRequestedDate()->format('Y-m-d'),
             'profesor' => $this->getProfessor()->getFullname(),
+            'materia'=> $this->getRequestedSubject(),
             'programas' => $this->getRequestedPrograms(),
             'observaciones' => $this->getObservations()
         ];
@@ -233,6 +239,18 @@ class Requests
     public function setVisible(bool $visible): static
     {
         $this->visible = $visible;
+
+        return $this;
+    }
+
+    public function getRequestedSubject(): ?string
+    {
+        return $this->requestedSubject;
+    }
+
+    public function setSubject(?string $requestedSubject): static
+    {
+        $this->requestedSubject = $requestedSubject;
 
         return $this;
     }

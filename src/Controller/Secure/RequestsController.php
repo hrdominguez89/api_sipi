@@ -70,6 +70,7 @@ class RequestsController extends AbstractController
 
             $requestBd->setStatusRequest(@$statusRequest);
             $requestBd->setProfessor(@$this->user);
+            $requestBd->setRequestedPrograms(implode(', ', $data['requestedPrograms']));
 
             $form = $this->createForm(RequestType::class, $requestBd);
             $form->submit($data, false);
@@ -156,7 +157,8 @@ class RequestsController extends AbstractController
 
             $requestBd->setRequestedDate(@DateTime::createFromFormat('Y-m-d', @$data['requestedDate']));
             $requestBd->setRequestedAmount(@$data['requestedAmount']);
-            $requestBd->setRequestedPrograms(@$data['requestedPrograms']);
+            $requestBd->setRequestedPrograms(implode(', ', @$data['requestedPrograms']));
+            $requestBd->setSubject(@$data['requestedSubject']);
             $requestBd->setObservations(@$data['observations']);
             $form = $this->createForm(RequestType::class, $requestBd);
             $form->submit($data, false);
