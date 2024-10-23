@@ -210,27 +210,27 @@ class Computers
         if ($data) {
             return [
                 'id' => $this->getId(),
-                'name' => $this->getName(),
-                'brand' => $this->getBrand(),
-                'model' => $this->getModel(),
+                'nombre' => $this->getName(),
+                'marca' => $this->getBrand(),
+                'modelo' => $this->getModel(),
                 'serie' => $this->getSerie(),
-                'details' => $this->getDetails(),
-                'status_computer_id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
-                'status_computer_name' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
-                'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-                'request_computer_id' => $data
+                'detalles' => $this->getDetails(),
+                'estado_computadora_id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
+                'estado_computadora_nombre' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
+                'creado_el' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+                'solicitud_id' => $data
             ];
         }
         return [
             'id' => $this->getId(),
-            'name' => $this->getName(),
-            'brand' => $this->getBrand(),
-            'model' => $this->getModel(),
+            'nombre' => $this->getName(),
+            'marca' => $this->getBrand(),
+            'modelo' => $this->getModel(),
             'serie' => $this->getSerie(),
-            'details' => $this->getDetails(),
-            'status_computer_id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
-            'status_computer_name' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
-            'created_at' => $this->getCreatedAt()->format('Y-m-d H:i:s')
+            'detalles' => $this->getDetails(),
+            'estado_computadora_id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
+            'estado_computadora_nombre' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
+            'creado_el' => $this->getCreatedAt()->format('Y-m-d H:i:s')
         ];
     }
 

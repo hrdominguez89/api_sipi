@@ -98,7 +98,7 @@ class Students
         return [
             'id' => $this->getId(),
             'dni' => $this->getDni(),
-            'fullname' => $this->getFullname()
+            'nombre_completo' => $this->getFullname()
         ];
     }
 

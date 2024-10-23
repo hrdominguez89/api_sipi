@@ -216,10 +216,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return [
             "id" => $this->getId(),
             "email" => $this->getEmail(),
-            "fullname" => $this->getFullname(),
-            "created_at" => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            "nombre_completo" => $this->getFullname(),
+            "creado_el" => $this->getCreatedAt()->format('Y-m-d H:i:s'),
             "rol_id" => $this->getRol() ? $this->getRol()->getId() : null,
-            "rol_name" => $this->getRol() ? $this->getRol()->getName() : null,
+            "rol_nombre" => $this->getRol() ? $this->getRol()->getName() : null,
             "active" => $this->isActive()
         ];
     }

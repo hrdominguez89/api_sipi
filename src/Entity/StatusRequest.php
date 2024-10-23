@@ -77,7 +77,7 @@ class StatusRequest
     {
         return [
             'id' => $this->getId(),
-            'name' => $this->getName()
+            'nombre' => $this->getName()
         ];
     }
 }
