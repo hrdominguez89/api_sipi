@@ -22,8 +22,10 @@ use App\Utils\FormErrorsUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Writer\PngWriter;
 
- #[Route("/api/computers")]
+#[Route("/api/computers")]
 class ComputersController extends AbstractController
 {
     private $formErrorsUtil;
@@ -72,6 +74,13 @@ class ComputersController extends AbstractController
         $computer->setDetails(@$data['details']);
         $computer->setStatusComputer(@$status_computer_available);
 
+        $qr = (new Builder(
+            writer: new PngWriter(),
+            data: $computer->getSerie(),
+            size: 300,
+            margin: 10
+        ))->build();
+        $computer->setQrCode($qr->getDataUri());
 
         $form = $this->createForm(ComputersType::class, $computer);
         $form->submit($data, false);
@@ -87,6 +96,7 @@ class ComputersController extends AbstractController
                 ['Content-Type' => 'application/json']
             );
         }
+
         $em->persist($computer);
         $em->flush();
         return $this->json(
@@ -284,6 +294,14 @@ class ComputersController extends AbstractController
         $computer->setSerie(@$data['serie'] ?: $computer->getSerie());
         $computer->setDetails(@$data['details'] ?: $computer->getDetails());
         $computer->setStatusComputer(@$status_computer_available ?: $computer->getStatusComputer());
+
+        $qr = (new Builder(
+            writer: new PngWriter(),
+            data: $computer->getSerie(),
+            size: 300,
+            margin: 10
+        ))->build();
+        $computer->setQrCode($qr->getDataUri());
 
         $form = $this->createForm(ComputersType::class, $computer);
         $form->submit($data, false);

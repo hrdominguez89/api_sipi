@@ -7,6 +7,7 @@ use App\Repository\ComputersRepository;
 use App\Repository\StatusComputerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ComputersRepository::class)]
@@ -47,6 +48,9 @@ class Computers
 
     #[ORM\Column(type: "boolean", nullable: true, options: ["default" => TRUE])]
     private $visible;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $qrCode = null;
 
     public function __construct()
     {
@@ -218,6 +222,7 @@ class Computers
                 'estado_computadora_id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
                 'estado_computadora_nombre' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
                 'creado_el' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+                'qr' => $this->getQrCode(),
                 'solicitud_id' => $data
             ];
         }
@@ -230,7 +235,8 @@ class Computers
             'detalles' => $this->getDetails(),
             'estado_computadora_id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
             'estado_computadora_nombre' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
-            'creado_el' => $this->getCreatedAt()->format('Y-m-d H:i:s')
+            'creado_el' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'qr' => $this->getQrCode()
         ];
     }
 
@@ -242,6 +248,18 @@ class Computers
     public function setVisible(?bool $visible): self
     {
         $this->visible = $visible;
+
+        return $this;
+    }
+
+    public function getQrCode(): ?string
+    {
+        return $this->qrCode;
+    }
+
+    public function setQrCode(?string $qrCode): static
+    {
+        $this->qrCode = $qrCode;
 
         return $this;
     }
