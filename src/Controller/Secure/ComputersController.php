@@ -21,6 +21,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\PngWriter;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -91,7 +92,8 @@ class ComputersController extends AbstractController
             margin: 10,
             logoPath: $logoPath,          // Ruta absoluta al archivo
             logoResizeToWidth: 100,
-            logoResizeToHeight: 100
+            logoResizeToHeight: 100,
+            errorCorrectionLevel: ErrorCorrectionLevel::High
         ))->build();
 
         $computer->setQrCode($qr->getDataUri());
@@ -325,7 +327,8 @@ class ComputersController extends AbstractController
             margin: 10,
             logoPath: $logoPath,          // Ruta absoluta al archivo
             logoResizeToWidth: 100,
-            logoResizeToHeight: 100
+            logoResizeToHeight: 100,
+            errorCorrectionLevel: ErrorCorrectionLevel::High
         ))->build();
 
         $computer->setQrCode($qr->getDataUri());
