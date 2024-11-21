@@ -90,8 +90,8 @@ class ComputersController extends AbstractController
             size: 300,
             margin: 10,
             logoPath: $logoPath,          // Ruta absoluta al archivo
-            logoResizeToWidth: 50,
-            logoResizeToHeight: 50
+            logoResizeToWidth: 100,
+            logoResizeToHeight: 100
         ))->build();
 
         $computer->setQrCode($qr->getDataUri());
@@ -324,8 +324,8 @@ class ComputersController extends AbstractController
             size: 300,
             margin: 10,
             logoPath: $logoPath,          // Ruta absoluta al archivo
-            logoResizeToWidth: 50,
-            logoResizeToHeight: 50
+            logoResizeToWidth: 100,
+            logoResizeToHeight: 100
         ))->build();
 
         $computer->setQrCode($qr->getDataUri());
