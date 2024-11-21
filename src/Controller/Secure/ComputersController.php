@@ -22,17 +22,19 @@ use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\PngWriter;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 #[Route("/api/computers")]
 class ComputersController extends AbstractController
 {
     private $formErrorsUtil;
+    private $kernel;
 
 
-    public function __construct(JWTEncoderInterface $jwtEncoder, UserRepository $userRepository, RequestStack $requestStack, FormErrorsUtil $formErrorsUtil)
+    public function __construct(JWTEncoderInterface $jwtEncoder, UserRepository $userRepository, RequestStack $requestStack, FormErrorsUtil $formErrorsUtil, KernelInterface $kernel)
     {
         $this->formErrorsUtil = $formErrorsUtil;
-
+        $this->kernel = $kernel;
         $request = $requestStack->getCurrentRequest();
 
         $token = explode(' ', $request->headers->get('Authorization'))[1];
@@ -73,16 +75,25 @@ class ComputersController extends AbstractController
         $computer->setStatusComputer(@$status_computer_available);
 
 
+        // Obtén el path absoluto al archivo
+        $projectDir = $this->kernel->getProjectDir();
+        $logoPath = $projectDir . '/public/logo/logo.jpg';
+
+        // Asegúrate de que el archivo exista
+        if (!file_exists($logoPath)) {
+            throw new \Exception("Logo file not found at path: " . $logoPath);
+        }
+
         $qr = (new Builder(
             writer: new PngWriter(),
             data: $computer->getSerie(),
             size: 300,
             margin: 10,
-            logoPath: __DIR__ . '/public/logo/logo.png', // Ruta al logo
-            logoResizeToWidth: 50,                  // Tamaño del logo
-            logoResizeToHeight: 50                  // Tamaño del logo
+            logoPath: $logoPath,          // Ruta absoluta al archivo
+            logoResizeToWidth: 50,
+            logoResizeToHeight: 50
         ))->build();
-        
+
         $computer->setQrCode($qr->getDataUri());
 
         $form = $this->createForm(ComputersType::class, $computer);
@@ -298,16 +309,25 @@ class ComputersController extends AbstractController
         $computer->setDetails(@$data['details'] ?: $computer->getDetails());
         $computer->setStatusComputer(@$status_computer_available ?: $computer->getStatusComputer());
 
+        // Obtén el path absoluto al archivo
+        $projectDir = $this->kernel->getProjectDir();
+        $logoPath = $projectDir . '/public/logo/logo.jpg';
+
+        // Asegúrate de que el archivo exista
+        if (!file_exists($logoPath)) {
+            throw new \Exception("Logo file not found at path: " . $logoPath);
+        }
+
         $qr = (new Builder(
             writer: new PngWriter(),
             data: $computer->getSerie(),
             size: 300,
             margin: 10,
-            logoPath: __DIR__ . '/public/logo/logo.png', // Ruta al logo
-            logoResizeToWidth: 50,                  // Tamaño del logo
-            logoResizeToHeight: 50                  // Tamaño del logo
+            logoPath: $logoPath,          // Ruta absoluta al archivo
+            logoResizeToWidth: 50,
+            logoResizeToHeight: 50
         ))->build();
-        
+
         $computer->setQrCode($qr->getDataUri());
         $computer->setQrCode($qr->getDataUri());
 
