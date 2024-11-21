@@ -5,8 +5,6 @@ namespace App\Controller\Secure;
 use App\Constants\Constants;
 use App\Entity\Computers;
 use App\Entity\RequestsComputers;
-use App\Entity\User;
-use App\Entity\StatusComputer;
 use App\Form\ComputersType;
 use App\Repository\ComputersRepository;
 use App\Repository\RequestsComputersRepository;
@@ -74,12 +72,17 @@ class ComputersController extends AbstractController
         $computer->setDetails(@$data['details']);
         $computer->setStatusComputer(@$status_computer_available);
 
+
         $qr = (new Builder(
             writer: new PngWriter(),
             data: $computer->getSerie(),
             size: 300,
-            margin: 10
+            margin: 10,
+            logoPath: __DIR__ . '/public/logo/logo.png', // Ruta al logo
+            logoResizeToWidth: 50,                  // Tamaño del logo
+            logoResizeToHeight: 50                  // Tamaño del logo
         ))->build();
+        
         $computer->setQrCode($qr->getDataUri());
 
         $form = $this->createForm(ComputersType::class, $computer);
@@ -299,8 +302,13 @@ class ComputersController extends AbstractController
             writer: new PngWriter(),
             data: $computer->getSerie(),
             size: 300,
-            margin: 10
+            margin: 10,
+            logoPath: __DIR__ . '/public/logo/logo.png', // Ruta al logo
+            logoResizeToWidth: 50,                  // Tamaño del logo
+            logoResizeToHeight: 50                  // Tamaño del logo
         ))->build();
+        
+        $computer->setQrCode($qr->getDataUri());
         $computer->setQrCode($qr->getDataUri());
 
         $form = $this->createForm(ComputersType::class, $computer);
