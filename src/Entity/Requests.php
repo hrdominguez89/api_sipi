@@ -223,7 +223,7 @@ class Requests
         return [
             'id' => $this->getId(),
             'equipos solicitados' => $this->getRequestedAmount(),
-            'fecha evento' => $this->getRequestedDate()->format('Y-m-d'),
+            'fecha_evento' => $this->getRequestedDate()->format('Y-m-d'),
             'profesor' => $this->getProfessor()->getFullname(),
             'materia' => $this->getRequestedSubject(),
             'programas' => $this->getRequestedPrograms(),
