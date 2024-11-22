@@ -223,11 +223,12 @@ class Requests
         return [
             'id' => $this->getId(),
             'equipos solicitados' => $this->getRequestedAmount(),
-            'fecha_evento' => $this->getRequestedDate()->format('Y-m-d'),
+            'fecha evento' => $this->getRequestedDate()->format('Y-m-d'),
             'profesor' => $this->getProfessor()->getFullname(),
-            'materia'=> $this->getRequestedSubject(),
+            'materia' => $this->getRequestedSubject(),
             'programas' => $this->getRequestedPrograms(),
-            'observaciones' => $this->getObservations()
+            'observaciones' => $this->getObservations(),
+            'descripcion' => $this->getObservations()
         ];
     }
 
