@@ -219,8 +219,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             "nombre completo" => $this->getFullname(),
             "creado el" => $this->getCreatedAt()->format('Y-m-d H:i:s'),
             "rol id" => $this->getRol() ? $this->getRol()->getId() : null,
-            "rol nombre" => $this->getRol() ? $this->getRol()->getName() : null,
-            "active" => $this->isActive()
+            "rol nombre" => $this->getRol()
+                ? match ($this->getRol()->getName()) {
+                    'ROLE_ADMIN' => 'Admin',
+                    'ROLE_BEDEL' => 'Bedel',
+                    'ROLE_PROFFESOR' => 'Profesor',
+                    default => null,
+                }
+                : null,
+            // "active" => $this->isActive()
         ];
     }
 }
