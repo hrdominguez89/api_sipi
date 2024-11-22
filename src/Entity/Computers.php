@@ -220,8 +220,8 @@ class Computers
                 'serie' => $this->getSerie(),
                 'detalles' => $this->getDetails(),
                 'estado computadora id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
-                'estado_computadora_nombre' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
-                'creado_el' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+                'estado computadora nombre' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
+                'creado el' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
                 'qr' => $this->getQrCode(),
                 'solicitud_id' => $data
             ];
@@ -234,8 +234,8 @@ class Computers
             'serie' => $this->getSerie(),
             'detalles' => $this->getDetails(),
             'estado computadora id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
-            'estado_computadora_nombre' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
-            'creado_el' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'estado computadora nombre' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
+            'creado el' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
             'qr' => $this->getQrCode()
         ];
     }
