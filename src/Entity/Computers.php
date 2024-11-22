@@ -240,6 +240,35 @@ class Computers
         ];
     }
 
+    public function getDataComputersAvailable($data = false): array
+    {
+        if ($data) {
+            return [
+                'id' => $this->getId(),
+                'nombre' => $this->getName(),
+                'marca' => $this->getBrand(),
+                'modelo' => $this->getModel(),
+                'serie' => $this->getSerie(),
+                'detalles' => $this->getDetails(),
+                'estado computadora id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
+                'estado computadora nombre' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
+                'creado el' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+                'solicitud id' => $data
+            ];
+        }
+        return [
+            'id' => $this->getId(),
+            'nombre' => $this->getName(),
+            'marca' => $this->getBrand(),
+            'modelo' => $this->getModel(),
+            'serie' => $this->getSerie(),
+            'detalles' => $this->getDetails(),
+            'estado computadora id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
+            'estado computadora nombre' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
+            'creado el' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+        ];
+    }
+
     public function isVisible(): ?bool
     {
         return $this->visible;

@@ -132,7 +132,7 @@ class ComputersController extends AbstractController
 
         $computers_lists = [];
         foreach ($computers as $computer) {
-            $computers_lists[] = $computer->getDataComputers();
+            $computers_lists[] = $computer->getDataComputersAvailable();
         }
 
         return $this->json(
