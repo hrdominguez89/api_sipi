@@ -145,8 +145,6 @@ class ComputersController extends AbstractController
     #[Route("/notavailable", name: "computers_not_available", methods: ["GET"])]
     public function computersNotAvailable(
         RequestsComputersRepository $requestsComputersRepository,
-        ComputersRepository $computersRepository,
-        StatusComputerRepository $statusComputerRepository
     ): JsonResponse {
 
         $computers_NotAvailable = $requestsComputersRepository->findNotAvailable();
@@ -184,9 +182,29 @@ class ComputersController extends AbstractController
 
 
             $status_computer_not_available = $statusComputerRepository->find(Constants::STATUS_COMPUTER_NOT_AVAILABLE);
-            $computer = $computersRepository->find($data['computer_id']);
+            $computer = $computersRepository->findOneBy(['id' => $data['computer_id'], 'statusComputer' => CONSTANTS::STATUS_COMPUTER_AVAILABLE]);
+            if (!$computer) {
+                return $this->json(
+                    [
+                        'message' => 'La computadora no se encuentra disponible',
+                    ],
+                    Response::HTTP_BAD_REQUEST,
+                    ['Content-Type' => 'application/json']
+                );
+            }
+
             $computer->setStatusComputer($status_computer_not_available);
-            $requestDb = $requestsRepository->find($data['request_id']);
+            $requestDb = $requestsRepository->findOneBy(['id' => $data['request_id']]);
+
+            if (!$requestDb) {
+                return $this->json(
+                    [
+                        'message' => 'El evento no existe',
+                    ],
+                    Response::HTTP_BAD_REQUEST,
+                    ['Content-Type' => 'application/json']
+                );
+            }
 
             $em->persist($computer);
 
@@ -199,7 +217,7 @@ class ComputersController extends AbstractController
             $em->flush();
 
             return $this->json(
-                ['message' => 'Se asigno la computadora al evento correctamente'],
+                ['message' => 'Se asignó la computadora al evento correctamente'],
                 Response::HTTP_CREATED,
                 ['Content-Type' => 'application/json']
             );
@@ -230,7 +248,7 @@ class ComputersController extends AbstractController
                 );
             }
 
-            $request_computer_id = $requestsComputersRepository->find($data['id']);
+            $request_computer_id = $requestsComputersRepository->findOneBy(['returnetAt' => null, 'computer' => $data['id']]);
 
             if (!$request_computer_id) {
                 return $this->json(
