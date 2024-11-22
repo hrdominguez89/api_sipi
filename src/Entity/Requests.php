@@ -228,7 +228,9 @@ class Requests
             'materia' => $this->getRequestedSubject(),
             'programas' => $this->getRequestedPrograms(),
             'observaciones' => $this->getObservations(),
-            'descripcion' => $this->getObservations()
+            'observations' => $this->getObservations(),
+            'descripcion' => $this->getObservations(),
+            'description' => $this->getObservations()
         ];
     }
 
