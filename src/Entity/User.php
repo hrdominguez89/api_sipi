@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Constants\Constants;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -220,10 +221,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             "creado el" => $this->getCreatedAt()->format('Y-m-d H:i:s'),
             "rol id" => $this->getRol() ? $this->getRol()->getId() : null,
             "rol nombre" => $this->getRol()
-                ? match ($this->getRol()->getName()) {
-                    'ROLE_ADMIN' => 'Admin',
-                    'ROLE_BEDEL' => 'Bedel',
-                    'ROLE_PROFFESOR' => 'Profesor',
+                ? match ($this->getRol()->getId()) {
+                    Constants::ROLE_ADMIN => 'Admin',
+                    Constants::ROLE_BEDEL => 'Bedel',
+                    Constants::ROLE_PROFESSOR => 'Profesor',
                     default => null,
                 }
                 : null,
