@@ -129,7 +129,7 @@ class Programs
             'nombre' => $this->getName(),
             'version' => $this->getVersion(),
             'observaciones' => $this->getObservations(),
-            'creado_el' => $this->getCreatedAt()->format('Y-m-d H:i:s')
+            'creado el' => $this->getCreatedAt()->format('Y-m-d H:i:s')
         ];
     }
 

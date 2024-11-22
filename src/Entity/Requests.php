@@ -193,11 +193,11 @@ class Requests
     {
         return [
             'id' => $this->getId(),
-            'programas_solicitados' => explode(',', $this->getRequestedPrograms()),
-            'equipos_solicitados' => $this->getRequestedAmount(),
+            'programas solicitados' => explode(',', $this->getRequestedPrograms()),
+            'equipos solicitados' => $this->getRequestedAmount(),
             'materia' => $this->getRequestedSubject(),
-            'solicitado_el' => $this->getCreatedAt()->format('Y-m-d'),
-            'solicitado_para_el' => $this->getRequestedDate()->format('Y-m-d'),
+            'solicitado el' => $this->getCreatedAt()->format('Y-m-d'),
+            'solicitado para el' => $this->getRequestedDate()->format('Y-m-d'),
             'estado' => $this->getStatusRequest()->getName(),
             'observaciones' => $this->getObservations()
         ];
@@ -207,11 +207,11 @@ class Requests
     {
         return [
             'id' => $this->getId(),
-            'programas_solicitados' => explode(',', $this->getRequestedPrograms()),
+            'programas solicitados' => explode(',', $this->getRequestedPrograms()),
             'materia' => $this->getRequestedSubject(),
-            'equipos_solicitados' => $this->getRequestedAmount(),
-            'solicitado_el' => $this->getCreatedAt()->format('Y-m-d'),
-            'solicitado_para_el' => $this->getRequestedDate()->format('Y-m-d'),
+            'equipos solicitados' => $this->getRequestedAmount(),
+            'solicitado el' => $this->getCreatedAt()->format('Y-m-d'),
+            'solicitado para el' => $this->getRequestedDate()->format('Y-m-d'),
             'estado' => $this->getStatusRequest()->getName(),
             'observaciones' => $this->getObservations(),
             'profesor' => $this->getProfessor()->getFullname()
@@ -222,7 +222,7 @@ class Requests
     {
         return [
             'id' => $this->getId(),
-            'equipos_solicitados' => $this->getRequestedAmount(),
+            'equipos solicitados' => $this->getRequestedAmount(),
             'fecha_evento' => $this->getRequestedDate()->format('Y-m-d'),
             'profesor' => $this->getProfessor()->getFullname(),
             'materia'=> $this->getRequestedSubject(),

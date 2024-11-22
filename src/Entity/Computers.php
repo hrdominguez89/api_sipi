@@ -223,7 +223,7 @@ class Computers
                 'estado computadora nombre' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
                 'creado el' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
                 'qr' => $this->getQrCode(),
-                'solicitud_id' => $data
+                'solicitud id' => $data
             ];
         }
         return [
