@@ -219,7 +219,7 @@ class Computers
                 'modelo' => $this->getModel(),
                 'serie' => $this->getSerie(),
                 'detalles' => $this->getDetails(),
-                'estado_computadora_id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
+                'estado computadora id' => $this->getStatusComputer() ? $this->getStatusComputer()->getId() : null,
                 'estado_computadora_nombre' => $this->getStatusComputer() ? $this->getStatusComputer()->getName() : null,
                 'creado_el' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
                 'qr' => $this->getQrCode(),
